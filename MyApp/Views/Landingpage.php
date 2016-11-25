@@ -128,8 +128,12 @@
                             Auto,
                             Boot
                             und Panzer</p>
-                        <a id="register" href="#" ?>Registrieren</a>
-                        <a id="login" href="#">Login</a>
+                        <a id="register" href="#" >Registrieren</a>
+                        <form class="login_form" method="post" action="<?=$login_link; ?>">
+                            <input type="text" name="email" placeholder="Deine E-Mailadresse">
+                            <input type="password" name="password" placeholder="Dein Password">
+                            <input type="submit" value="Login">
+                        </form>
                     </div>
                     <div class="col-xs-6 hidden-xs-down"></div>
 

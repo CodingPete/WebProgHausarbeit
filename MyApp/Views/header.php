@@ -11,6 +11,8 @@
 <head>
     <meta charset="UTF-8">
     <title>MyTrack</title>
+
+    <!-- Sachen von anderen Leuten -->
     <script
         src="https://code.jquery.com/jquery-2.2.4.min.js"
         integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
@@ -20,6 +22,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Meine heiligen Javamanusskripte -->
+    <script src="<?= APP_STATICS; ?>js/Users.js"></script>
+    <script src="<?= APP_STATICS; ?>js/GPS.js"></script>
     <style>
         body {
             color: #FFFFFF;
@@ -47,6 +53,9 @@
         .row {
             margin: 0 auto;
             border-radius: 0px;
+        }
+        form {
+            color: #000000;
         }
     </style>
 </head>

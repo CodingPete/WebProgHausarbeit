@@ -24,8 +24,6 @@ class MyTrack extends Framework
         }
         else $this->dashboard();
 
-        //$this->load_content("GPS");
-
         $this->modules->View->assign("footer");
         $this->modules->View->render();
 
