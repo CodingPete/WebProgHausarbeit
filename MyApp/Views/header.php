@@ -26,6 +26,7 @@
     <!-- Meine heiligen Javamanusskripte -->
     <script src="<?= APP_STATICS; ?>js/Users.js"></script>
     <script src="<?= APP_STATICS; ?>js/GPS.js"></script>
+    <script src="<?= APP_STATICS; ?>js/GoogleMaps.js"></script>
 
     <style>
         body {

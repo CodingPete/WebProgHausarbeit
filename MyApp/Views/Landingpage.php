@@ -75,6 +75,9 @@
         border-radius: 5px;
         cursor: pointer;
     }
+    #map {
+        height: 100%;
+    }
 </style>
 <div class="container-fluid">
     <div class="row">
@@ -134,6 +137,7 @@
                             <input type="password" name="password" placeholder="Dein Password">
                             <input type="submit" value="Login">
                         </form>
+                        <div id="map"></div>
                     </div>
                     <div class="col-xs-6 hidden-xs-down"></div>
 
