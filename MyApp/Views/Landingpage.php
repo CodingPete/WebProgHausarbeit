@@ -131,7 +131,13 @@
                             Auto,
                             Boot
                             und Panzer</p>
-                        <a id="register" href="#" >Registrieren</a>
+                        <form class="register_form" method="post" action="<?=$register_link; ?>">
+                            <input type="text" name="username" placeholder="Benutzername" required>
+                            <input type="text" name="email" placeholder="E-Mail" required>
+                            <input type="password" name="password" placeholder="Passwort" required>
+                            <input type="password" name="password_validation" placeholder="Passwort erneut eingeben" required>
+                            <input type="submit" value="Registrieren">
+                        </form>
                         <form class="login_form" method="post" action="<?=$login_link; ?>">
                             <input type="text" name="email" placeholder="Deine E-Mailadresse">
                             <input type="password" name="password" placeholder="Dein Password">

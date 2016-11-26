@@ -26,7 +26,6 @@ class MyTrack extends Framework
 
         $this->modules->View->assign("footer");
         $this->modules->View->render();
-
     }
 
 

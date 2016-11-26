@@ -6,6 +6,16 @@ function register(form) {
         type: "POST",
         url: form.attr("action"),
         data: form.serialize(),
+        beforeSend: function(xhr) {
+            var formData = form.serializeArray();
+            var password1 = formData[2].value;
+            var password2 = formData[3].value;
+
+            if(password1 != password2) {
+                alert("Passwörter stimmen nicht überein!");
+                xhr.abort();
+            }
+        },
         success: function(response) {
             if(response == "true") {
                 alert("registriert!");
@@ -17,7 +27,7 @@ function register(form) {
 
 function login(form) {
     $.ajax({
-        type: "POST",
+        type: form.attr("method"),
         url: form.attr("action"),
         data: form.serialize(),
         success: function(response) {
@@ -31,7 +41,7 @@ function login(form) {
 
 function logout(DomElement) {
     $.ajax({
-        type: "POST",
+        type: form.attr("method"),
         url: DomElement.attr("action"),
         data: {},
         success: function() {
