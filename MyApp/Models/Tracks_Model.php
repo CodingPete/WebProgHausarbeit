@@ -17,6 +17,7 @@ class Tracks_Model
 
     /**
      * @param $user_id Liefert alle Tracks eines Users zurück
+     * @return array Liefert alle Tracks des Users zurück. Leeres Array wenn der User keine Tracks besitzt.
      */
     public function get_tracks_on_user($user_id)
     {
@@ -79,18 +80,13 @@ class Tracks_Model
 
     /**
      * @param $track_id Der zu löschende Track
+     * @param $user_id Der Besitzer des Tracks
      * @return integer Anzahl der gelöschten Schlüssel, 0 wenn Schlüssel nicht gefunden.
      */
     public function delete_track($track_id, $user_id)
     {
         $this->Database->del("$user_id:$track_id");
     }
-
-    public function get_track_in_gpx($track_id)
-    {
-
-    }
-
 
     /**
      * @param $data Rawdata des Tracks
