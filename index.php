@@ -27,4 +27,5 @@ require_once(APP_ROOT
     . "Controllers"
     . DIRECTORY_SEPARATOR
     . "MyTrack.php");
+
 new MyTrack();

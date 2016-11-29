@@ -16,17 +16,18 @@ class Users_Model
     public function get_user_by_email($email)
     {
 
-        $user = $this->Database->hGetAll("user:$email");
+        $user = $this->Database->hGetAll("$email:details");
         if (count($user) > 0) return $user;
         else return false;
     }
 
     public function register($email, $username, $password)
     {
-        $this->Database->hMSet("user:$email", array(
+        $this->Database->hMSet("$email:details", array(
             "email" => $email,
             "username" => $username,
-            "password" => md5($password)
+            //"password" => md5($password)
+            "password" => $password
         ));
     }
 
@@ -34,7 +35,8 @@ class Users_Model
     {
         $user = $this->get_user_by_email($email);
         if (count($user) > 0) {
-            if (($user["password"]) == md5($password)) return true;
+            //if (($user["password"]) == md5($password)) return true;
+            if($user['password'] == $password) return true;
         }
         return false;
     }
