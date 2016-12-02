@@ -4,11 +4,11 @@
  * User: peter
  * Date: 16.11.2016
  * Time: 20:55
- */?>
+ */ ?>
 <style>
     #menu-bar {
         width: 100%;
-        background-color: transparent;
+        background-color: rgba(47, 59, 80, 0.95);
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -16,29 +16,50 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index:5;
+        z-index: 5;
     }
-    #menu-bar > i {
+
+    #menu-bar > #burger {
         margin-right: auto;
         cursor: pointer;
         padding: 10px;
     }
-    #menu-bar > i:hover {
-        background-color: rgba(106,128,167, 0.2);
+
+    #menu-bar > #burger:hover {
+        background-color: rgba(106, 128, 167, 0.2);
         border-radius: 5px;
     }
+
     #menu-bar > a {
         padding: 10px;
         color: saddlebrown;
     }
+
     #menu-bar > a:hover {
-        background-color: rgba(106,128,167, 0.2);
+        background-color: rgba(106, 128, 167, 0.2);
         border-radius: 5px;
+    }
+
+    #menu-bar > span {
+        max-width: 50%;
+    }
+    #menu-bar > .recorder_controls {
+        margin: auto;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 5px;
+        color: red;
     }
 </style>
 <div id="menu-bar">
     <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
-    <a href="#">Startseite</a>
-    <a href="#">Strecken</a>
-    <a href="#">Warum</a>
+    <?php if ($logged_in): ?>
+            <i class="fa fa-circle recorder_controls" aria-hidden="true"></i>
+            <i class="fa fa-stop recorder_controls" aria-hidden="true"></i>
+            <i class="fa fa-play recorder_controls" aria-hidden="true"></i>
+    <?php else: ?>
+        <a href="#">Startseite</a>
+        <a href="#">Strecken</a>
+        <a href="#">Warum</a>
+    <?php endif; ?>
 </div>

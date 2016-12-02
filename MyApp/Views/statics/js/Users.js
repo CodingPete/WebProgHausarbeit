@@ -41,12 +41,14 @@ function login(form) {
 }
 
 function logout(DomElement) {
+    console.log("Logout");
     $.ajax({
-        type: form.attr("method"),
+        type: "POST",
         url: DomElement.attr("action"),
         data: {},
         success: function() {
             alert("Benutzer ausgeloggt");
+            location.reload();
         }
     })
 }
@@ -63,6 +65,10 @@ $(document).ready(function() {
         e.preventDefault();
         e.stopImmediatePropagation();
         login($(this));
+    });
+
+    $(".logout").on("click", function() {
+       logout($(this)) ;
     });
 });
 
