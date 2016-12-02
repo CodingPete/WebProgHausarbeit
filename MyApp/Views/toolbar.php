@@ -37,7 +37,7 @@
     }
 </style>
 <div id="menu-bar">
-    <i class="fa fa-bars fa-2x" aria-hidden="true"></i>
+    <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
     <a href="#">Startseite</a>
     <a href="#">Strecken</a>
     <a href="#">Warum</a>

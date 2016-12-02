@@ -20,6 +20,26 @@ class Tracks extends Framework
         header("Location: " . APP_DOMAIN);
     }
 
+    public function ajax_get_tracks_on_user() {
+        $this->modules->Model->load("Tracks_Model");
+
+        $user_id = $this->modules->Input->post("user_id", true);
+
+        $tracks_on_user = $this->Tracks_Model->get_tracks_on_user($user_id);
+
+        return $tracks_on_user;
+    }
+
+    public function ajax_create_track() {
+        $this->modules->Model->load("Tracks_Model");
+
+        $input_track = json_decode($this->modules->Input->post("data", true));
+
+        $return = $this->Tracks_Model->create_track($input_track);
+
+        exit($return);
+    }
+
 
 
 

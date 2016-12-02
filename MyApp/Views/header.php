@@ -27,6 +27,7 @@
     <script src="<?= APP_STATICS; ?>js/Users.js"></script>
     <script src="<?= APP_STATICS; ?>js/GPS.js"></script>
     <script src="<?= APP_STATICS; ?>js/GoogleMaps.js"></script>
+    <script src="<?= APP_STATICS; ?>js/side_bar.js"></script>
 
     <style>
         body {

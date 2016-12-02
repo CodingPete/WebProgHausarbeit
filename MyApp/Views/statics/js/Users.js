@@ -33,6 +33,7 @@ function login(form) {
         success: function(response) {
             if(response == "true") {
                 alert("Login!");
+                location.reload();
             }
             else alert("Login fehlgeschlagen!");
         }

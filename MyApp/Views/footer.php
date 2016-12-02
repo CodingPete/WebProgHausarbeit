@@ -7,8 +7,6 @@
  */?>
 
 
-<!-- Google Maps -->
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiI6HJSMOEJ9_uAIDfYJRqokSqI1FT3RM&callback=initMap"
-        async defer></script>
+
 </body>
 </html>
