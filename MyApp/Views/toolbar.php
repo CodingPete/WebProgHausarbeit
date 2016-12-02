@@ -13,10 +13,10 @@
         flex-direction: row;
         justify-content: flex-end;
         padding: 5px;
-        position: absolute;
+        position: relative;
         top: 0;
         left: 0;
-        z-index: 5;
+        z-index: 2;
     }
 
     #menu-bar > #burger {

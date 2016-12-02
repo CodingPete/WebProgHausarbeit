@@ -5,8 +5,6 @@
 
 $(document).ready(function() {
 
-   // $("#side_bar").css("top", $("#menu-bar").css("height"));
-
     $("#burger").on("click", function(e) {
 
         var sidebar = $("#side_bar");
@@ -24,4 +22,8 @@ $(document).ready(function() {
             })
         }
     });
+
+    $("#back").on("click", function() {
+        $("#burger").click();
+    })
 });

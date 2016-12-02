@@ -10,10 +10,11 @@
         display: none;
         height: 100vh;
         width: 34vw;
+        top: 0;
         position: fixed;
         left: -34vw;
-        background-color: rgba(47, 59, 80, 0.95);
-        z-index: 1;
+        background-color: rgba(47, 59, 80, 1);
+        z-index: 3;
     }
 
     #side_bar_container {
@@ -56,10 +57,15 @@
     .side_bar_logout {
         margin-top: auto;
     }
+    #back {
+        cursor: pointer;
+        padding: 10px;
+    }
 </style>
 
 <div id="side_bar">
     <div id="side_bar_container">
+        <i class="fa fa-arrow-left fa-2x" id="back" aria-hidden="true"></i>
         <div id="side_bar_profile">
             <i class="fa fa-user-circle-o" aria-hidden="true" style=""></i>
         </div>
@@ -72,7 +78,7 @@
             Statistik
         </div>
 
-        <div class="side_bar_link side_bar_logout" action="<?= $logout_link; ?>">
+        <div class="side_bar_link side_bar_logout logout" action="<?= $logout_link; ?>">
             <i class="fa fa-sign-out" aria-hidden="true"></i>
             Logout
         </div>

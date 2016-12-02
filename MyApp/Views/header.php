@@ -10,6 +10,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+
     <title>MyTrack</title>
 
     <!-- Sachen von anderen Leuten -->
@@ -35,6 +38,7 @@
             background-color: rgb(47, 59, 80);
             overflow-x: hidden;
             font-size: 1.2em;
+            height: 100vh;
         }
         a {
             padding: 1.2em;

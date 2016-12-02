@@ -7,8 +7,11 @@
 ?>
 <style>
     #map {
-        width: 100vw;
+        position: fixed !important;
+        left: 0;
+        top: 0;
         height: 100vh;
+        width: 100vw;
     }
     .gm-style-mtc {
         display: none;
