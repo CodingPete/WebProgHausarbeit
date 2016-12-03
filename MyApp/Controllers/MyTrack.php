@@ -37,7 +37,9 @@ class MyTrack extends Framework
 
     private function dashboard()
     {
-        $this->modules->View->assign("side_bar");
+        $this->modules->View->assign("side_bar", array(
+            "user_id" => $this->modules->Session->get("user_id")
+        ));
         $this->modules->View->assign("map");
     }
 

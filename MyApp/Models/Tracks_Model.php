@@ -43,6 +43,7 @@ class Tracks_Model
         if ($track) {
             $user_id = $track['user_id'];
             $track_id = $track['track_id'] = $this->Database->hIncrBy("$user_id:details", "track_keys", 1);
+            $track['waypoints'] = json_encode($track['waypoints']);
             $this->Database->hMSet("$user_id:$track_id", $track);
             return true;
         }
@@ -56,6 +57,7 @@ class Tracks_Model
     public function get_track($user_id, $track_id)
     {
         $track = $this->Database->hGetAll("$user_id:$track_id");
+        $track['waypoints'] = json_decode($track['waypoints']);
 
         if (!empty($track)) return $track;
         else return false;
@@ -72,6 +74,7 @@ class Tracks_Model
         if ($track) {
             $user_id = $track['user_id'];
             $track_id = $track['track_id'];
+            $track['waypoints'] = json_encode($track['waypoints']);
             return $this->Database->hMSet("$user_id:$track_id", $track);
         }
         else return false;
@@ -95,9 +98,10 @@ class Tracks_Model
     public function validate_input($data)
     {
         foreach ($this->model_fields as $model_field)
-            $track[$model_field] = $data[$model_field];
+            if(isset($data[$model_field]))
+                $track[$model_field] = $data[$model_field];
 
-        if (isset($track) && !empty($track)) return $track;
+        if (isset($track) && !empty($track) && !empty($track['user_id'])) return $track;
         else return false;
     }
 }

@@ -27,7 +27,7 @@ class Users extends Framework
 
         if($this->Users_Model->login($email, $password)) {
             $this->modules->Session->set("user_type", "user");
-            $this->modules->Session->set("email", $email);
+            $this->modules->Session->set("user_id", $email);
             exit("true");
         }
         else exit("false");

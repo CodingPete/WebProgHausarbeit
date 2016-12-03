@@ -33,11 +33,10 @@ class Tracks extends Framework
     public function ajax_create_track() {
         $this->modules->Model->load("Tracks_Model");
 
-        $input_track = json_decode($this->modules->Input->post("data", true));
+        $input_track = (array)json_decode($this->modules->Input->post("payload", false));
 
-        $return = $this->Tracks_Model->create_track($input_track);
-
-        exit($return);
+        if($this->Tracks_Model->create_track($input_track)) exit("true");
+        else exit("false");
     }
 
 

@@ -31,6 +31,7 @@
     <script src="<?= APP_STATICS; ?>js/GPS.js"></script>
     <script src="<?= APP_STATICS; ?>js/GoogleMaps.js"></script>
     <script src="<?= APP_STATICS; ?>js/side_bar.js"></script>
+    <script src="<?= APP_STATICS; ?>js/Recorder.js"></script>
 
     <style>
         body {

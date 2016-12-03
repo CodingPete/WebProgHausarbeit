@@ -8,7 +8,7 @@
 <style>
     #menu-bar {
         width: 100%;
-        background-color: rgba(47, 59, 80, 0.95);
+        background-color: rgba(47, 59, 80, 1);
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
@@ -43,20 +43,27 @@
     #menu-bar > span {
         max-width: 50%;
     }
-    #menu-bar > .recorder_controls {
+    #recorder {
+        margin-left: auto;
+        flex-grow: 10;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+
+
+    }
+    .recorder_controls {
         margin: auto;
         cursor: pointer;
         padding: 10px;
-        border-radius: 5px;
-        color: red;
     }
 </style>
 <div id="menu-bar">
     <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
     <?php if ($logged_in): ?>
-            <i class="fa fa-circle recorder_controls" aria-hidden="true"></i>
-            <i class="fa fa-stop recorder_controls" aria-hidden="true"></i>
-            <i class="fa fa-play recorder_controls" aria-hidden="true"></i>
+        <span id="recorder">
+
+        </span>
     <?php else: ?>
         <a href="#">Startseite</a>
         <a href="#">Strecken</a>
