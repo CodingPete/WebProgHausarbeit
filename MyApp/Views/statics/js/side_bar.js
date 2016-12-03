@@ -22,7 +22,7 @@ $(document).ready(function() {
         }
         else {
             sidebar.animate({
-                left: "-34vw"
+                left: "-60vw"
             }, 500, function() {
                 sidebar.hide();
             });
