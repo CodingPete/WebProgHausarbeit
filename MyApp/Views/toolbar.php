@@ -60,13 +60,7 @@
 </style>
 <div id="menu-bar">
     <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
-    <?php if ($logged_in): ?>
         <span id="recorder">
 
         </span>
-    <?php else: ?>
-        <a href="#">Startseite</a>
-        <a href="#">Strecken</a>
-        <a href="#">Warum</a>
-    <?php endif; ?>
 </div>

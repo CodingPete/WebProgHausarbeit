@@ -64,11 +64,11 @@ $(document).ready(function() {
     $(".login_form").on("submit", function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        login();
+        login($(this));
     });
 
     $(".logout").on("click", function() {
-       logout($(this)) ;
+       logout() ;
     });
 });
 
