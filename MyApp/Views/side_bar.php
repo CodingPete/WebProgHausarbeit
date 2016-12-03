@@ -123,7 +123,7 @@
                 Statistik
             </div>
 
-            <div class="side_bar_link side_bar_logout logout" action="<?= $logout_link; ?>">
+            <div class="side_bar_link side_bar_logout logout">
             <span>
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
             </span>

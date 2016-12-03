@@ -13,29 +13,26 @@ class Users_Model
 
     }
 
-    public function get_user_by_email($email)
+    public function get_user_by_id($user_id)
     {
 
-        $user = $this->Database->hGetAll("$email:details");
+        $user = $this->Database->hGetAll("$user_id:details");
         if (count($user) > 0) return $user;
         else return false;
     }
 
-    public function register($email, $username, $password)
+    public function register($username, $password)
     {
-        $this->Database->hMSet("$email:details", array(
-            "email" => $email,
+        $this->Database->hMSet("$username:details", array(
             "username" => $username,
-            //"password" => md5($password)
             "password" => $password
         ));
     }
 
-    public function login($email, $password)
+    public function login($username, $password)
     {
-        $user = $this->get_user_by_email($email);
+        $user = $this->get_user_by_id($username);
         if (count($user) > 0) {
-            //if (($user["password"]) == md5($password)) return true;
             if($user['password'] == $password) return true;
         }
         return false;

@@ -18,17 +18,12 @@ class MyTrack extends Framework
     {
         $this->modules->View->assign("header");
         $this->modules->View->assign("toolbar", array(
-                "logged_in" => $this->modules->Session->get("user_type") == "user",
-                "logout_link" => APP_DOMAIN . "c=Users&f=logout"
+                "logged_in" => $this->modules->Session->get("user_type") == "user"
             )
         );
-        if ($this->modules->Session->get("user_type") != "user") {
-
-            $this->modules->View->assign("Landingpage", array(
-                "login_link" => APP_DOMAIN . "c=Users&f=login",
-                "register_link" => APP_DOMAIN . "c=Users&f=register"
-            ));
-        } else $this->dashboard();
+        if ($this->modules->Session->get("user_type") != "user")
+            $this->modules->View->assign("Landingpage");
+        else $this->dashboard();
 
         $this->modules->View->assign("footer");
         $this->modules->View->render();

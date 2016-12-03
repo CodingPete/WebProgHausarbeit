@@ -22,12 +22,12 @@ class Users extends Framework
     {
         $this->modules->Model->load("Users_Model");
 
-        $email = $this->modules->Input->post("email", true);
+        $username = $this->modules->Input->post("username", true);
         $password = $this->modules->Input->post("password", true);
 
-        if($this->Users_Model->login($email, $password)) {
+        if($this->Users_Model->login($username, $password)) {
             $this->modules->Session->set("user_type", "user");
-            $this->modules->Session->set("user_id", $email);
+            $this->modules->Session->set("user_id", $username);
             exit("true");
         }
         else exit("false");
@@ -37,14 +37,13 @@ class Users extends Framework
 
         $this->modules->Model->load("Users_Model");
 
-        $email = $this->modules->Input->post("email", true);
         $username = $this->modules->Input->post("username", true);
         $password = $this->modules->Input->post("password", true);
 
         // Gibt es bereits einen Benutzer mit dieser E-Mailadresse?
-        if($this->Users_Model->get_user_by_email($email)) exit("false");
+        if($this->Users_Model->get_user_by_id($username)) exit("false");
         else {
-            $this->Users_Model->register($email, $username, $password);
+            $this->Users_Model->register($username, $password);
             exit("true");
         }
     }

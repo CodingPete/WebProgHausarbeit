@@ -4,12 +4,12 @@
 function register(form) {
     $.ajax({
         type: "POST",
-        url: form.attr("action"),
+        url: "/index.php?c=Users&f=register",
         data: form.serialize(),
         beforeSend: function(xhr) {
             var formData = form.serializeArray();
-            var password1 = formData[2].value;
-            var password2 = formData[3].value;
+            var password1 = formData[1].value;
+            var password2 = formData[2].value;
 
             if(password1 != password2) {
                 alert("Passwörter stimmen nicht überein!");
@@ -19,6 +19,7 @@ function register(form) {
         success: function(response) {
             if(response == "true") {
                 alert("registriert!");
+                login(form);
             }
             else alert("Registration fehlgeschlagen!");
         }
@@ -27,12 +28,11 @@ function register(form) {
 
 function login(form) {
     $.ajax({
-        type: form.attr("method"),
-        url: form.attr("action"),
+        type: "POST",
+        url: "/index.php?c=Users&f=login",
         data: form.serialize(),
         success: function(response) {
             if(response == "true") {
-                alert("Login!");
                 location.reload();
             }
             else alert("Login fehlgeschlagen!");
@@ -40,11 +40,11 @@ function login(form) {
     });
 }
 
-function logout(DomElement) {
+function logout() {
     console.log("Logout");
     $.ajax({
         type: "POST",
-        url: DomElement.attr("action"),
+        url: "/index.php?c=Users&f=logout",
         data: {},
         success: function() {
             alert("Benutzer ausgeloggt");
@@ -64,7 +64,7 @@ $(document).ready(function() {
     $(".login_form").on("submit", function(e) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        login($(this));
+        login();
     });
 
     $(".logout").on("click", function() {
