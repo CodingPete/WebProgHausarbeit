@@ -48,12 +48,14 @@
         flex-grow: 10;
         display: flex;
         flex-direction: row;
-        justify-content: center;
-
-
+        justify-content: flex-end;
+        text-align: center;
+    }
+    #recorder > * {
+        margin-top: auto;
+        margin-bottom: auto;
     }
     .recorder_controls {
-        margin: auto;
         cursor: pointer;
         padding: 10px;
     }
@@ -61,6 +63,6 @@
 <div id="menu-bar">
     <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
         <span id="recorder">
-
+            <i id="record" class="fa fa-circle recorder_controls" aria-hidden="true"></i>
         </span>
 </div>
