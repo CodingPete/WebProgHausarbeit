@@ -4,7 +4,7 @@
 function register(form) {
     $.ajax({
         type: "POST",
-        url: "/index.php?c=Users&f=register",
+        url: APP_DOMAIN + "index.php?c=Users&f=register",
         data: form.serialize(),
         beforeSend: function(xhr) {
             var formData = form.serializeArray();
@@ -29,7 +29,7 @@ function register(form) {
 function login(form) {
     $.ajax({
         type: "POST",
-        url: "/index.php?c=Users&f=login",
+        url: APP_DOMAIN + "index.php?c=Users&f=login",
         data: form.serialize(),
         success: function(response) {
             if(response == "true") {
@@ -44,7 +44,7 @@ function logout() {
     console.log("Logout");
     $.ajax({
         type: "POST",
-        url: "/index.php?c=Users&f=logout",
+        url: APP_DOMAIN + "index.php?c=Users&f=logout",
         data: {},
         success: function() {
             alert("Benutzer ausgeloggt");

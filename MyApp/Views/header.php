@@ -33,6 +33,9 @@
     <script src="<?= APP_STATICS; ?>js/side_bar.js"></script>
     <script src="<?= APP_STATICS; ?>js/Recorder.js"></script>
     <script src="<?= APP_STATICS; ?>js/content_panel.js"></script>
+    <script>
+        var APP_DOMAIN = "<?=APP_DOMAIN; ?>";
+    </script>
 
     <style>
         body {

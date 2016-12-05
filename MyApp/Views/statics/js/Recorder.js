@@ -91,13 +91,14 @@ var Recorder = function () {
 
         $.ajax({
             type: "POST",
-            url: "/index.php?c=Tracks&f=ajax_create_track",
+            url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_create_track",
             data: {
                 payload: JSON.stringify({
                     track_id: 'dont-care',
                     user_id: $("#nickname").text(),
                     waypoints: waypoints,
-                    privacy: 'private'
+                    waypoints_enc: google.maps.geometry.encoding.encodePath(current_track.getPath()),
+                    privacy: 'private',
                 })
             },
             success: function (response) {

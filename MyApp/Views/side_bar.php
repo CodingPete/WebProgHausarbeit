@@ -125,7 +125,7 @@
                 Statistik
             </div>
 
-            <div class="side_bar_link side_bar_logout logout">
+            <div class="side_bar_link side_bar_logout logout" id="logout">
             <span>
                 <i class="fa fa-sign-out" aria-hidden="true"></i>
             </span>

@@ -5,6 +5,8 @@ $(document).ready(function() {
 
     $(".side_bar_link").on("click", function() {
 
+        if($(this).attr("id") === "logout") return;
+
         var target = $(this).attr("id");
 
         var content_panel = $("#content_panel");
@@ -15,7 +17,7 @@ $(document).ready(function() {
             $("#ajax_container").html("");
             $.ajax({
                 type: "POST",
-                url: "/index.php?c=Tracks&f="+target,
+                url: APP_DOMAIN + "index.php?c=Tracks&f="+target,
                 success: function (response) {
                     $("#ajax_container").html(response);
                 }

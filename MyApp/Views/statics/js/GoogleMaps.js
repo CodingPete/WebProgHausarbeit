@@ -52,3 +52,7 @@ $(document).ready(function() {
    })
 });
 
+
+// Public-Tracks die auf der Karte liegen zeigen
+
+

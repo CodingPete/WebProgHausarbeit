@@ -9,7 +9,9 @@
 class Session
 {
     public function __construct(&$config, &$framework) {
-        session_start();
+        if(session_status() == PHP_SESSION_NONE)
+            session_start();
+
         return $this;
     }
     public function get($what) {

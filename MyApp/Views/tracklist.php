@@ -5,30 +5,44 @@
  * Date: 05.12.2016
  * Time: 12:54
  */
+$static_maps_url = "https://maps.googleapis.com/maps/api/staticmap?size=200x100&path=weight:3%7Ccolor:0xff0000ff%7Cenc:";
+$static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
 ?>
 <style>
     select {
         color: #000000;
     }
+    td {
+        vertical-align: middle !important;
+    }
 </style>
 <table class="table">
     <thead>
     <tr>
-        <th>Tracknummer</th>
-        <th>Sichtbarkeit</th>
+        <th></th>
+        <th>Teilen?</th>
         <th>Dauer</th>
     </tr>
     </thead>
     <tbody>
     <?php foreach ($tracklist as $track): ?>
         <tr>
-            <td><?= $track["track_id"]; ?></td>
+            <td><img src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"></td>
             <td>
                 <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
-                    <option><?= $track["privacy"]; ?></option>
-                    <option>
+                    <option value="<?= $track["privacy"]; ?>">
                         <?php
+                        if($track["privacy"] == "private") echo "Nein";
+                        else echo "Ja";
+                        ?>
+                    </option>
+                    <option value="<?php
                         if ($track["privacy"] == "private") echo "public";
+                        else echo "private"
+                        ?>">
+                        <?php
+                        if($track["privacy"] == "private") echo "Ja";
+                        else echo "Nein";
                         ?>
                     </option>
                 </select>
@@ -53,7 +67,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/index.php?c=Tracks&f=ajax_update_track",
+            url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_update_track",
             data: {
                 track_id: track_id,
                 user_id: user_id,

@@ -12,6 +12,7 @@ class Tracks_Model
         "track_id",
         "user_id",
         "waypoints",
+        "waypoints_enc",
         "privacy"
     );
 
@@ -25,7 +26,7 @@ class Tracks_Model
 
         $result = array();
 
-        for($i = 1; $i <= $track_keys; $i++) {
+        for($i = $track_keys; $i > 0; $i--) {
             $entry = $this->Database->hGetAll("$user_id:$i");
             if(!empty($entry)) $result[$entry['track_id']] = $entry;
         }
