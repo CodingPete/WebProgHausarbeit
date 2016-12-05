@@ -4,7 +4,7 @@
 GPS = function() {
     var latitude = 0;
     var longitude = 0;
-    var counter = 0;
+    //var counter = 0;
 
     var positions = [
         {
@@ -41,10 +41,10 @@ GPS = function() {
 
     var getLocation = function() {
         if(navigator.geolocation) {
-            //navigator.geolocation.getCurrentPosition(savePosition);
+            navigator.geolocation.getCurrentPosition(savePosition);
         }
-        savePosition(positions[counter]);
-        counter = (counter + 1) % 5;
+        //savePosition(positions[counter]);
+        //counter = (counter + 1) % 5;
 
     };
     var savePosition = function(position) {

@@ -89,6 +89,7 @@
 
     #back {
         cursor: pointer;
+        padding-bottom: 30px;
     }
 
     #black_bar {
@@ -100,6 +101,12 @@
         opacity: 0;
         background-color: black;
     }
+    #avatar {
+        width: 20%;
+        border-radius: 100%;
+        margin-bottom: 30px;
+        cursor: pointer;
+    }
 </style>
 
 <div id="side_bar">
@@ -107,18 +114,18 @@
         <div id="side_bar_upper">
             <i class="fa fa-arrow-left fa-2x" id="back" aria-hidden="true"></i>
             <div id="side_bar_profile">
-                <i class="fa fa-user-circle-o" aria-hidden="true" style=""></i>
+                <img src="<?= APP_STATICS;?>borstiapache.jpg" id="avatar">
                 <div id="nickname"><?= $user_id; ?></div>
             </div>
         </div>
         <div id="side_bar_lower">
-            <div class="side_bar_link" id="ajax_get_track_list_html">
+            <div class="side_bar_link" controller="Tracks" func="ajax_get_track_list_html">
             <span>
             <i class="fa fa-history" aria-hidden="true"></i>
                 </span>
                 Meine Tracks
             </div>
-            <div class="side_bar_link" id="statistics">
+            <div class="side_bar_link" controller="" func="statistics">
             <span>
             <i class="fa fa-line-chart" aria-hidden="true"></i>
             </span>

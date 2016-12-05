@@ -70,5 +70,14 @@ $(document).ready(function() {
     $(".logout").on("click", function() {
        logout() ;
     });
+
+    $.ajax({
+        method: "POST",
+        url: APP_DOMAIN + "index.php?c=Users&f=ajax_get_avatar",
+        success: function(response) {
+            if(response !== "false")
+                $("#avatar").attr("src", response);
+        }
+    })
 });
 

@@ -38,5 +38,13 @@ class Users_Model
         return false;
     }
 
+    public function set_avatar($user_id, $avatar) {
+        $this->Database->hMSet("$user_id:details", array("avatar" => $avatar));
+    }
+
+    public function get_avatar($user_id) {
+        return $this->Database->hGet("$user_id:details", "avatar");
+    }
+
 
 }

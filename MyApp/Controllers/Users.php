@@ -52,4 +52,27 @@ class Users extends Framework
     {
         $this->modules->Session->destroy();
     }
+
+    public function ajax_upload_avatar_html() {
+        $this->modules->View->assign("avatar");
+        $this->modules->View->render();
+    }
+
+    public function ajax_upload_avatar() {
+        $this->modules->Model->load("Users_Model");
+
+        $user_id = $this->modules->Session->get("user_id");
+        $avatar = $this->modules->Input->post("avatar", false);
+
+        $this->Users_Model->set_avatar($user_id, $avatar);
+    }
+
+    public function ajax_get_avatar() {
+        $this->modules->Model->load("Users_Model");
+        $user_id = $this->modules->Session->get("user_id");
+
+        $avatar = $this->Users_Model->get_avatar($user_id);
+        if(!$avatar) exit("false");
+        exit($avatar);
+    }
 }

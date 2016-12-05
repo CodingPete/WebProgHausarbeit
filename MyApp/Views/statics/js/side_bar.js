@@ -41,4 +41,5 @@ $(document).ready(function() {
     $("#black_bar").on("click", function() {
         $("#burger").click();
     })
+
 });

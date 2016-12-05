@@ -18,6 +18,7 @@
         background-color: rgba(47, 59, 80, 1);
         display: none;
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     #content_panel_container {
@@ -31,6 +32,7 @@
 
     #content_panel_close {
         cursor: pointer;
+        padding-bottom: 30px;
     }
 
 </style>

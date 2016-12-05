@@ -7,8 +7,30 @@ $(document).ready(function() {
 
         if($(this).attr("id") === "logout") return;
 
-        var target = $(this).attr("id");
+        var controller = $(this).attr("controller");
+        var func = $(this).attr("func");
 
+        load_content(controller, func);
+
+
+    });
+
+    $("#content_panel_close").on("click", function() {
+        var content_panel = $("#content_panel");
+
+        content_panel.animate({
+            right: "-100%"
+        }, 500, function() {
+            content_panel.hide();
+        });
+    });
+
+    $("#side_bar_profile").on("click", function() {
+
+        load_content("Users", "ajax_upload_avatar_html");
+    });
+
+    var load_content = function(controller, func) {
         var content_panel = $("#content_panel");
 
         if(content_panel.css("display") == "none") {
@@ -17,7 +39,7 @@ $(document).ready(function() {
             $("#ajax_container").html("");
             $.ajax({
                 type: "POST",
-                url: APP_DOMAIN + "index.php?c=Tracks&f="+target,
+                url: APP_DOMAIN + "index.php?c="+controller+"&f="+func,
                 success: function (response) {
                     $("#ajax_container").html(response);
                 }
@@ -37,17 +59,7 @@ $(document).ready(function() {
                 content_panel.hide();
             });
         }
-    });
-
-    $("#content_panel_close").on("click", function() {
-        var content_panel = $("#content_panel");
-
-        content_panel.animate({
-            right: "-100%"
-        }, 500, function() {
-            content_panel.hide();
-        });
-    });
+    }
 });
 
 
