@@ -32,6 +32,7 @@
     <script src="<?= APP_STATICS; ?>js/GoogleMaps.js"></script>
     <script src="<?= APP_STATICS; ?>js/side_bar.js"></script>
     <script src="<?= APP_STATICS; ?>js/Recorder.js"></script>
+    <script src="<?= APP_STATICS; ?>js/content_panel.js"></script>
 
     <style>
         body {

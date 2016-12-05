@@ -32,6 +32,7 @@ class MyTrack extends Framework
         $this->modules->View->assign("side_bar", array(
             "user_id" => $this->modules->Session->get("user_id")
         ));
+        $this->modules->View->assign("content_panel");
         $this->modules->View->assign("map");
     }
 
