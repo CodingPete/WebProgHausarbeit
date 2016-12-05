@@ -21,15 +21,17 @@ class Tracks extends Framework
     }
 
 
-    public function ajax_get_track_list_html() {
+    public function ajax_get_track_list_html()
+    {
         $this->modules->View->assign("tracklist", array(
-            "tracklist" => $this->ajax_get_tracks_on_user()
+            "tracklist" => $this->get_tracks_on_user()
         ));
         $this->modules->View->render();
     }
 
 
-    public function ajax_get_tracks_on_user() {
+    private function get_tracks_on_user()
+    {
         $this->modules->Model->load("Tracks_Model");
 
         //$user_id = $this->modules->Input->post("user_id", true);
@@ -40,34 +42,45 @@ class Tracks extends Framework
         return $tracks_on_user;
     }
 
-    public function ajax_create_track() {
+
+    public function ajax_create_track()
+    {
         $this->modules->Model->load("Tracks_Model");
 
         $input_track = (array)json_decode($this->modules->Input->post("payload", false));
 
-        if($this->Tracks_Model->create_track($input_track)) exit("true");
+        if ($this->Tracks_Model->create_track($input_track)) exit("true");
         else exit("false");
     }
 
+    public function ajax_update_track()
+    {
+        $this->modules->Model->load("Tracks_Model");
+
+        $track_id = $this->modules->Input->post("track_id", true);
+        $user_id = $this->modules->Input->post("user_id", true);
+
+        $track = $this->Tracks_Model->get_track($user_id, $track_id);
+
+        if ($track) {
+            $keys = array_keys($track);
+
+            foreach ($keys as $key) {
+                $field_to_change = $this->modules->Input->post($key, false);
+                if ($field_to_change) {
+                    $track[$key] = $field_to_change;
+                }
+            }
+
+            if ($this->Tracks_Model->update_track($track)) return "true";
+            else return "false";
+        }
+        return "false";
+    }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function test_get_tracks_on_user()
+    public
+    function test_get_tracks_on_user()
     {
         $test_user_id = "peter.meyer.fl@googlemail.com";
 
@@ -78,7 +91,8 @@ class Tracks extends Framework
         echo "</pre>";
     }
 
-    public function test_create_track()
+    public
+    function test_create_track()
     {
 
         $test_track = array(
@@ -94,7 +108,8 @@ class Tracks extends Framework
         echo $this->Tracks_Model->create_track($test_track);
     }
 
-    public function test_get_track()
+    public
+    function test_get_track()
     {
 
         $test_user_id = "peter.meyer.fl@googlemail.com";
@@ -107,7 +122,8 @@ class Tracks extends Framework
         echo "</pre>";
     }
 
-    public function test_update_track()
+    public
+    function test_update_track()
     {
         $test_track = array(
             "track_id" => "5",

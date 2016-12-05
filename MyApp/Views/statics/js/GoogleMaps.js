@@ -4,6 +4,7 @@
 var map;
 var map_pos;
 var current_track;
+var center = true;
 
 function initMap() {
 
@@ -41,7 +42,13 @@ setInterval(function() {
         lat: gps.x(),
         lng: gps.y()
     };
-    map.setCenter(position);
+    if(center) map.setCenter(position);
     map_pos.setPosition(position);
 }, 200);
+
+$(document).ready(function() {
+   $("#center").on("click", function() {
+       center = !center;
+   })
+});
 

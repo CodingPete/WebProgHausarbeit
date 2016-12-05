@@ -59,10 +59,18 @@
         cursor: pointer;
         padding: 10px;
     }
+    #center {
+        margin-top: auto;
+        margin-bottom: auto;
+        padding-left: 20px;
+        cursor: pointer;
+    }
 </style>
 <div id="menu-bar">
     <i id="burger" class="fa fa-bars fa-2x" aria-hidden="true"></i>
         <span id="recorder">
             <i id="record" class="fa fa-circle recorder_controls" aria-hidden="true"></i>
         </span>
+    <i class="fa fa-compass fa-2x" id="center" aria-hidden="true"></i>
+
 </div>
