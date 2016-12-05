@@ -38,6 +38,7 @@
         flex-direction: column;
         justify-content: flex-start;
     }
+
     #side_bar_lower {
         width: 100%;
         height: 80%;
@@ -46,6 +47,7 @@
         flex-direction: column;
         justify-content: flex-start;
     }
+
     .side_bar_link {
         width: 100%;
         display: flex;
@@ -110,13 +112,13 @@
             </div>
         </div>
         <div id="side_bar_lower">
-            <div class="side_bar_link">
+            <div class="side_bar_link" id="ajax_get_track_list_html">
             <span>
             <i class="fa fa-history" aria-hidden="true"></i>
                 </span>
                 Meine Tracks
             </div>
-            <div class="side_bar_link">
+            <div class="side_bar_link" id="statistics">
             <span>
             <i class="fa fa-line-chart" aria-hidden="true"></i>
             </span>
