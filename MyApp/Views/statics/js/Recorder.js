@@ -78,6 +78,12 @@ var Recorder = function () {
 
         current_track.getPath().push(new google.maps.LatLng(gps.x(), gps.y()));
         waypoints.push(waypoint);
+
+        // Jetzt noch schnell den Track wegwerfen, der zur Ansicht/Bearbeitung vorliegt
+        track_viewed.getPath().clear();
+
+        // Karte auf die derzeitige Position zentrieren.
+        map.setCenter(waypoint);
     };
 
     var go_to_pause = function() {

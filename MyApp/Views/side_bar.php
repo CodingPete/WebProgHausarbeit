@@ -41,7 +41,7 @@
 
     #side_bar_lower {
         width: 100%;
-        height: 80%;
+
         padding: 10px;
         display: flex;
         flex-direction: column;
@@ -77,6 +77,7 @@
 
     #side_bar_profile > div {
         margin-top: 20px;
+        margin-bottom: 20px;
     }
 
     #side_bar_profile > i {

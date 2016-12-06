@@ -27,7 +27,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     <tbody>
     <?php foreach ($tracklist as $track): ?>
         <tr>
-            <td><img src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"></td>
+            <td><img class="track_img" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>" user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>"></td>
             <td>
                 <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
                     <option value="<?= $track["privacy"]; ?>">
@@ -77,5 +77,40 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 if (response == "false") alert("Änderung fehlgeschlagen :(");
             }
         });
+    });
+
+    $(".track_img").on("click", function() {
+        set_centering(false);
+
+        // Laden des ausgewählten Tracks.
+        var track_id = $(this).attr("track");
+        var user_id = $(this).attr("user");
+        track_id_viewd = track_id;
+        $.ajax({
+            type: "POST",
+            url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_get_track",
+            dataType: "json",
+            data: {
+                user_id: user_id,
+                track_id: track_id
+            },
+            success: function(response) {
+                var waypoints = response.waypoints;
+
+                // Bisherigen Pfad löschen
+                track_viewed.getPath().clear();
+                // Wegpunkte in die Karte zeichnen
+                track_viewed.setPath(waypoints);
+                // Wegpunkte Array ebenfalls hinterlegen
+                track_viewed_waypoints = waypoints;
+                track_id_viewed = track_id;
+                // Karte auf Anfangspunkt des Tracks zentrieren.
+                map.setCenter(waypoints[0]);
+
+                // Content Panel und Seitenmenü schließen.
+                $("#content_panel_close").click();
+                $("#back").click();
+            }
+        })
     });
 </script>

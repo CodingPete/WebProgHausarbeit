@@ -29,6 +29,15 @@ class Tracks extends Framework
         $this->modules->View->render();
     }
 
+    public function ajax_get_track() {
+        $this->modules->Model->load("Tracks_Model");
+
+        $user_id = $this->modules->Input->post("user_id", true);
+        $track_id = $this->modules->Input->post("track_id", true);
+
+        $track = $this->Tracks_Model->get_track($user_id, $track_id);
+        exit(json_encode($track));
+    }
 
     private function get_tracks_on_user()
     {

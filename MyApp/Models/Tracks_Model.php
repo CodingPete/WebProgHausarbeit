@@ -75,7 +75,6 @@ class Tracks_Model
         if ($track) {
             $user_id = $track['user_id'];
             $track_id = $track['track_id'];
-            $track['waypoints'] = json_encode($track['waypoints']);
             return $this->Database->hMSet("$user_id:$track_id", $track);
         }
         else return false;
