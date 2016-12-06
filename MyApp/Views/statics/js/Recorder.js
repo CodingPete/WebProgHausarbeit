@@ -16,6 +16,8 @@ var Recorder = function () {
 
     var view = "#recorder";
 
+    var is_start = true;
+
     var waypoints = [];
 
     this.state_machine = function () {
@@ -40,11 +42,13 @@ var Recorder = function () {
     };
 
     $(document).on("click", "#record", function () {
+        is_start = true;
         state = RECORDING;
         go_to_recording();
     });
     $(document).on("click", "#play", function () {
         state = RECORDING;
+        is_start = true;
         go_to_recording();
     });
     $(document).on("click", "#pause", function () {
@@ -77,11 +81,14 @@ var Recorder = function () {
         var waypoint = {
             lat: gps.x(),
             lng: gps.y(),
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            is_start: is_start
         };
 
         current_track.getPath().push(new google.maps.LatLng(gps.x(), gps.y()));
         waypoints.push(waypoint);
+
+        is_start = false;
 
     };
 

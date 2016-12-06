@@ -25,8 +25,8 @@ class Config {
         "pass" => ""
     );
 
-    //public $redis_db = PETER_MEYER_DB;
-    public $redis_db = 0;
+    public $redis_db = PETER_MEYER_DB;
+    //public $redis_db = 0;
 
     public function __construct() {
         return $this;

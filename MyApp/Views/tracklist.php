@@ -36,10 +36,27 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         </div>
         <div>
             <p><?php
+                $duration = 0;
                 $waypoints = json_decode($track["waypoints"]);
-                $first = $waypoints[0]->timestamp;
-                $last = array_pop($waypoints)->timestamp;
-                $duration = floor(($last - $first) / 1000 / 60);
+                for($i = 0; $i < count($waypoints); $i++) {
+                    $current = $waypoints[$i];
+                    if($i < count($waypoints)) {
+                        $next = $waypoints[$i + 1];
+                    }
+                    else $next = null;
+
+                    if(!isset($current->timestamp))
+                        continue;
+
+                    if(!is_null($next)) {
+                        if(isset($next->is_start) && !$next->is_start) {
+                            $duration = $duration +  $next->timestamp - $current->timestamp;
+                        }
+                        else continue;
+                    }
+                    else continue;
+                }
+                $duration = floor($duration / 1000 / 60);
                 echo $duration . " Minuten";
                 ?></p>
         </div>
