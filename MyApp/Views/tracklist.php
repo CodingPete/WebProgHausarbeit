@@ -80,6 +80,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     });
 
     $(".track_img").on("click", function() {
+
         set_centering(false);
 
         // Laden des ausgewählten Tracks.

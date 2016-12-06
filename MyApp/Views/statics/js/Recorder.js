@@ -3,12 +3,16 @@
  */
 var Recorder = function () {
 
-    var IDLE = 0;
-    var RECORDING = 1;
-    var PAUSE = 2;
-    var STOP = 3;
+    IDLE = 0;
+    RECORDING = 1;
+    PAUSE = 2;
+    STOP = 3;
 
     var state = IDLE;
+
+    this.get_state = function() {
+        return state;
+    };
 
     var view = "#recorder";
 
@@ -79,11 +83,6 @@ var Recorder = function () {
         current_track.getPath().push(new google.maps.LatLng(gps.x(), gps.y()));
         waypoints.push(waypoint);
 
-        // Jetzt noch schnell den Track wegwerfen, der zur Ansicht/Bearbeitung vorliegt
-        track_viewed.getPath().clear();
-
-        // Karte auf die derzeitige Position zentrieren.
-        map.setCenter(waypoint);
     };
 
     var go_to_pause = function() {
