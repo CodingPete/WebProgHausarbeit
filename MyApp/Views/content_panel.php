@@ -35,6 +35,11 @@
         padding-bottom: 30px;
     }
 
+    #ajax_container {
+        display: flex;
+        flex-direction: column;
+    }
+
 </style>
 
 <div id="content_panel">

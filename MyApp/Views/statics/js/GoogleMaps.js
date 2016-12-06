@@ -11,7 +11,6 @@ var center = true;
 
 function initMap() {
 
-    // todo: Letzte Position des Users aus der Datenbank holen und Karte darauf zentrieren
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
@@ -39,7 +38,8 @@ function initMap() {
         strokeColor: "#FF0000",
         strokeOpacity: 1.0,
         strokeWeight: 3,
-        editable: true
+        editable: true,
+        suppressUndo: true
     });
     track_viewed.setMap(map);
 

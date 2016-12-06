@@ -62,6 +62,16 @@ class Tracks extends Framework
         else exit("false");
     }
 
+    public function ajax_delete_track() {
+        $this->modules->Model->load("Tracks_Model");
+
+        $track_id = $this->modules->Input->post("track_id", true);
+        $user_id = $this->modules->Input->post("user_id", true);
+
+        $this->Tracks_Model->delete_track($user_id, $track_id);
+
+    }
+
     public function ajax_update_track()
     {
         $this->modules->Model->load("Tracks_Model");

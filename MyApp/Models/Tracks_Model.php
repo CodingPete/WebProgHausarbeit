@@ -86,7 +86,7 @@ class Tracks_Model
      * @param $user_id Der Besitzer des Tracks
      * @return integer Anzahl der gelöschten Schlüssel, 0 wenn Schlüssel nicht gefunden.
      */
-    public function delete_track($track_id, $user_id)
+    public function delete_track($user_id, $track_id)
     {
         $this->Database->del("$user_id:$track_id");
     }

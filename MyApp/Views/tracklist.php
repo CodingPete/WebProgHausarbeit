@@ -5,60 +5,76 @@
  * Date: 05.12.2016
  * Time: 12:54
  */
-$static_maps_url = "https://maps.googleapis.com/maps/api/staticmap?size=200x100&path=weight:3%7Ccolor:0xff0000ff%7Cenc:";
+$static_maps_url = "https://maps.googleapis.com/maps/api/staticmap?size=400x200&path=weight:3%7Ccolor:0xff0000ff%7Cenc:";
 $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
 ?>
 <style>
     select {
         color: #000000;
+        width: 100%;
     }
-    td {
-        vertical-align: middle !important;
+
+    .track_entry {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 30px;
+    }
+
+    .track_entry {
+        text-align: center;
+    }
+
+    a:hover {
+
     }
 </style>
-<table class="table">
-    <thead>
-    <tr>
-        <th></th>
-        <th>Teilen?</th>
-        <th>Dauer</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($tracklist as $track): ?>
-        <tr>
-            <td><img class="track_img" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>" user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>"></td>
-            <td>
-                <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
-                    <option value="<?= $track["privacy"]; ?>">
-                        <?php
-                        if($track["privacy"] == "private") echo "Nein";
-                        else echo "Ja";
-                        ?>
-                    </option>
-                    <option value="<?php
-                        if ($track["privacy"] == "private") echo "public";
-                        else echo "private"
-                        ?>">
-                        <?php
-                        if($track["privacy"] == "private") echo "Ja";
-                        else echo "Nein";
-                        ?>
-                    </option>
-                </select>
-            </td>
-            <td>
-                <?php
+<?php foreach ($tracklist as $track): ?>
+    <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
+        <div>
+            <img class="track_img" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
+                 user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
+        </div>
+        <div>
+            <p><?php
                 $waypoints = json_decode($track["waypoints"]);
                 $first = $waypoints[0]->timestamp;
                 $last = array_pop($waypoints)->timestamp;
                 $duration = floor(($last - $first) / 1000 / 60);
                 echo $duration . " Minuten";
-                ?>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
+                ?></p>
+        </div>
+        <div>
+            <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
+                <option value="<?= $track["privacy"]; ?>">
+                    <?php
+                    if ($track["privacy"] == "private") echo "Nicht teilen";
+                    else echo "Teilen";
+                    ?>
+                </option>
+                <option value="<?php
+                if ($track["privacy"] == "private") echo "public";
+                else echo "Nicht teilen"
+                ?>">
+                    <?php
+                    if ($track["privacy"] == "private") echo "Teilen";
+                    else echo "Nicht teilen";
+                    ?>
+                </option>
+            </select>
+        </div>
+        <button class="btn btn-secondary collapse_stats" type="button" data-toggle="collapse"
+                data-target="#stats_<?= $track["track_id"]; ?>" aria-expanded="false"
+                aria-controls="#stats_<?= $track["track_id"]; ?>">
+            Statisik ansehen
+        </button>
+        <div class="collapse" id="stats_<?= $track["track_id"]; ?>" user="<?= $track["user_id"]; ?>"
+             track="<?= $track["track_id"]; ?>">
+
+        </div>
+    </div>
+    <hr>
+<?php endforeach; ?>
+</tbody>
 </table>
 <script>
     $("select").on("change", function () {
@@ -79,7 +95,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         });
     });
 
-    $(".track_img").on("click", function() {
+    $(".track_img").on("click", function () {
 
         set_centering(false);
 
@@ -95,7 +111,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 user_id: user_id,
                 track_id: track_id
             },
-            success: function(response) {
+            success: function (response) {
                 var waypoints = response.waypoints;
 
                 // Bisherigen Pfad löschen
@@ -114,4 +130,40 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
             }
         })
     });
+
+    $(".collapse_stats").on("click", function () {
+        var area = $(this).next();
+
+        var user_id = area.attr("user");
+        var track_id = area.attr("track");
+
+        $.ajax({
+            url: APP_DOMAIN + "index.php?c=Statistics&f=get_track_stats",
+            method: "POST",
+            data: {
+                user_id: user_id,
+                track_id: track_id
+            },
+            success: function (response) {
+                area.html(response);
+            }
+        });
+    });
+
+    $(document).on("click", ".delete", function () {
+        var user_id = $(this).attr("user");
+        var track_id = $(this).attr("track");
+
+        $.ajax({
+            url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_delete_track",
+            method: "POST",
+            data: {
+                user_id: user_id,
+                track_id: track_id
+            },
+            success: function () {
+                $("#track_entry_" + track_id).remove();
+            }
+        })
+    })
 </script>
