@@ -17,8 +17,7 @@
         right: -100%;
         background-color: rgba(47, 59, 80, 1);
         display: none;
-        overflow-y: auto;
-        overflow-x: hidden;
+
     }
 
     #content_panel_container {
@@ -38,6 +37,8 @@
     #ajax_container {
         display: flex;
         flex-direction: column;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
 </style>

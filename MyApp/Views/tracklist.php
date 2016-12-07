@@ -15,50 +15,25 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     }
 
     .track_entry {
-        display: flex;
-        flex-direction: column;
         margin-bottom: 30px;
-    }
-
-    .track_entry {
         text-align: center;
     }
-
-    a:hover {
-
+    .track_img {
+        cursor: pointer;
     }
 </style>
 <?php foreach ($tracklist as $track): ?>
     <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
         <div>
+            <?php if(isset($track["waypoints_enc"])): ?>
             <img class="track_img" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
                  user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
+            <?php endif; ?>
         </div>
         <div>
-            <p><?php
-                $duration = 0;
-                $waypoints = json_decode($track["waypoints"]);
-                for($i = 0; $i < count($waypoints); $i++) {
-                    $current = $waypoints[$i];
-                    if($i < count($waypoints)) {
-                        $next = $waypoints[$i + 1];
-                    }
-                    else $next = null;
-
-                    if(!isset($current->timestamp))
-                        continue;
-
-                    if(!is_null($next)) {
-                        if(isset($next->is_start) && !$next->is_start) {
-                            $duration = $duration +  $next->timestamp - $current->timestamp;
-                        }
-                        else continue;
-                    }
-                    else continue;
-                }
-                $duration = floor($duration / 1000 / 60);
-                echo $duration . " Minuten";
-                ?></p>
+            <p>
+                Dein Track vom <?= date("d.m. H:i", $track["starttime"]); ?> Uhr
+            </p>
         </div>
         <div>
             <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
@@ -89,10 +64,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
 
         </div>
     </div>
-    <hr>
 <?php endforeach; ?>
-</tbody>
-</table>
 <script>
     $("select").on("change", function () {
         var track_id = $(this).attr("track");

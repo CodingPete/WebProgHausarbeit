@@ -11,6 +11,8 @@ class Tracks_Model
     private $model_fields = array(
         "track_id",
         "user_id",
+        "duration",
+        "starttime",
         "waypoints",
         "waypoints_enc",
         "privacy"
@@ -44,6 +46,8 @@ class Tracks_Model
         if ($track) {
             $user_id = $track['user_id'];
             $track_id = $track['track_id'] = $this->Database->hIncrBy("$user_id:details", "track_keys", 1);
+            $track["duration"] = $this->get_duration($track);
+            $track["starttime"] = $track["waypoints"][0]->timestamp / 1000;
             $track['waypoints'] = json_encode($track['waypoints']);
             $this->Database->hMSet("$user_id:$track_id", $track);
             return true;
@@ -103,5 +107,38 @@ class Tracks_Model
 
         if (isset($track) && !empty($track) && !empty($track['user_id'])) return $track;
         else return false;
+    }
+
+    /**
+     * @param $track Der Track für den die Dauer berechnet werden soll.
+     * @return float|int Gibt die Dauer des Tracks in Minuten zurück.
+     *
+     */
+    public function get_duration($track) {
+
+        $duration = 0;
+
+
+            $waypoints = $track["waypoints"];
+
+            for ($i = 0; $i < count($waypoints); $i++) {
+                $current = $waypoints[$i];
+                if ($i < count($waypoints) - 1) {
+                    $next = $waypoints[$i + 1];
+                } else $next = null;
+
+                if (!isset($current->timestamp))
+                    continue;
+
+                if (!is_null($next)) {
+                    if (isset($next->is_start) && !$next->is_start) {
+                        $duration = $duration + $next->timestamp - $current->timestamp;
+                    } else continue;
+                } else continue;
+            }
+
+            $duration = floor($duration / 1000 / 60);
+
+        return $duration;
     }
 }

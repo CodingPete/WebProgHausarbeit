@@ -34,4 +34,5 @@ class Statistics extends Framework
 
         echo $delete_button;
     }
+
 }
