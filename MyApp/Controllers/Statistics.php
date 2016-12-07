@@ -34,7 +34,7 @@ class Statistics extends Framework
 
         $error = array();
 
-        $this->modules->Model->load("Track_Model");
+        $this->modules->Model->load("Tracks_Model");
 
         $track = $this->Tracks_Model->get_track($user_id, $track_id);
 
@@ -48,6 +48,7 @@ class Statistics extends Framework
             if(count($waypoints) > 1) {
 
                 // ... nur dann macht es Sinn Statistiken zu erstellen.
+                echo "Ich würde jetzt Statistiken erstellen wenn ich könnte...<br>";
 
             }
             else $error[] = "Es konnten keine Statistiken erstellt werden :(";
@@ -59,9 +60,10 @@ class Statistics extends Framework
             foreach($error as $err) echo $err;
         }
 
-        $delete_button = "<button class='btn btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
-
-        echo $delete_button;
+        if($this->modules->Session->get("user_id") == $user_id) {
+            $delete_button = "<button class='btn btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
+            echo $delete_button;
+        }
     }
 
     /**

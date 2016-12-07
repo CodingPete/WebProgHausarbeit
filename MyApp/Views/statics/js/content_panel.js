@@ -1,6 +1,7 @@
 /**
  * Created by peter on 05.12.2016.
  */
+var load_content;
 $(document).ready(function() {
 
     $(".side_bar_link").on("click", function() {
@@ -30,7 +31,8 @@ $(document).ready(function() {
         load_content("Users", "ajax_upload_avatar_html");
     });
 
-    var load_content = function(controller, func) {
+    load_content = function(controller, func, data) {
+
         var content_panel = $("#content_panel");
 
         if(content_panel.css("display") == "none") {
@@ -40,6 +42,7 @@ $(document).ready(function() {
             $.ajax({
                 type: "POST",
                 url: APP_DOMAIN + "index.php?c="+controller+"&f="+func,
+                data: data,
                 success: function (response) {
                     $("#ajax_container").html(response);
                 }

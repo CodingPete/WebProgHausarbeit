@@ -15,7 +15,8 @@ class Tracks_Model
         "starttime",
         "waypoints",
         "waypoints_enc",
-        "privacy"
+        "privacy",
+        "public_key"
     );
 
     /**
@@ -31,6 +32,18 @@ class Tracks_Model
         for($i = $track_keys; $i > 0; $i--) {
             $entry = $this->Database->hGetAll("$user_id:$i");
             if(!empty($entry)) $result[$entry['track_id']] = $entry;
+        }
+        return $result;
+    }
+
+    public function get_public_tracks() {
+        $public_keys = $this->Database->hGet("public:details", "public_keys");
+
+        $result = array();
+
+        for($i = $public_keys; $i > 0; $i--) {
+            $entry = $this->Database->hGetAll("public:$i");
+            if(!empty($entry)) $result[] = $entry;
         }
         return $result;
     }
@@ -79,10 +92,47 @@ class Tracks_Model
         if ($track) {
             $user_id = $track['user_id'];
             $track_id = $track['track_id'];
+            $track["waypoints"] = json_encode($track["waypoints"]);
             return $this->Database->hMSet("$user_id:$track_id", $track);
         }
         else return false;
 
+    }
+
+    public function update_privacy($user_id, $track_id) {
+
+        $track = $this->get_track($user_id, $track_id);
+
+        // todo: Einträge werden doppelt erstellt
+        // Falls nötig, Datensatz für geteilte Tracks initialisieren
+        if(!$this->Database->hExists("public:details", "public_keys")) {
+            $this->Database->hSet("public:details", "public_keys", 0);
+        }
+
+        // Bei änderung eines Tracks die Sichtbarkeit prüfen
+        if($track["privacy"] == "private") {
+            // Datenbankeintrag löschen
+            $public_key = $track["public_key"];
+            $this->Database->del("public:$public_key");
+            $this->Database->hDel("$user_id:$track_id", "public_key");
+        }
+        else {
+
+            // Ggf vorherige Verknüpfung unkenntlich machen
+            if(isset($track["public_key"])) {
+                $public_key = $track["public_key"];
+                $this->Database->del("public:$public_key");
+                $this->Database->hDel("$user_id:$track_id", "public_key");
+            }
+            // Dateneinbanktrag erstellen
+            $public_key = $this->Database->hIncrBy("public:details", "public_keys", 1);
+            $this->Database->hMSet("public:$public_key", array(
+                "track_id" => $track_id,
+                "user_id" => $user_id,
+                "startpoint" => json_encode($track["waypoints"][0])
+            ));
+            $this->Database->hSet("$user_id:$track_id", "public_key", $public_key);
+        }
     }
 
     /**

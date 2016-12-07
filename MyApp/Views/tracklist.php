@@ -32,9 +32,14 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         </div>
         <div>
             <p>
+                <?php if($track["user_id"] == $user_id): ?>
                 Dein Track vom <?= date("d.m. H:i", $track["starttime"]); ?> Uhr
+                <?php else: ?>
+                <?=$track["user_id"];?>'s Track vom Track vom <?= date("d.m. H:i", $track["starttime"]); ?> Uhr
+                <?php endif; ?>
             </p>
         </div>
+        <?php if($track["user_id"] == $user_id): ?>
         <div>
             <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
                 <option value="<?= $track["privacy"]; ?>">
@@ -45,7 +50,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 </option>
                 <option value="<?php
                 if ($track["privacy"] == "private") echo "public";
-                else echo "Nicht teilen"
+                else echo "private"
                 ?>">
                     <?php
                     if ($track["privacy"] == "private") echo "Teilen";
@@ -54,6 +59,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 </option>
             </select>
         </div>
+        <?php endif; ?>
         <button class="btn btn-secondary collapse_stats" type="button" data-toggle="collapse"
                 data-target="#stats_<?= $track["track_id"]; ?>" aria-expanded="false"
                 aria-controls="#stats_<?= $track["track_id"]; ?>">
@@ -91,7 +97,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         // Laden des ausgewählten Tracks.
         var track_id = $(this).attr("track");
         var user_id = $(this).attr("user");
-        track_id_viewd = track_id;
+        track_id_viewed = track_id;
         $.ajax({
             type: "POST",
             url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_get_track",

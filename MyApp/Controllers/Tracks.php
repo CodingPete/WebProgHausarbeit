@@ -24,12 +24,14 @@ class Tracks extends Framework
     public function ajax_get_track_list_html()
     {
         $this->modules->View->assign("tracklist", array(
-            "tracklist" => $this->get_tracks_on_user()
+            "tracklist" => $this->get_tracks_on_user(),
+            "user_id" => $this->modules->Session->get("user_id")
         ));
         $this->modules->View->render();
     }
 
-    public function ajax_get_track() {
+    public function ajax_get_track()
+    {
         $this->modules->Model->load("Tracks_Model");
 
         $user_id = $this->modules->Input->post("user_id", true);
@@ -62,7 +64,8 @@ class Tracks extends Framework
         else exit("false");
     }
 
-    public function ajax_delete_track() {
+    public function ajax_delete_track()
+    {
         $this->modules->Model->load("Tracks_Model");
 
         $track_id = $this->modules->Input->post("track_id", true);
@@ -91,10 +94,65 @@ class Tracks extends Framework
                 }
             }
 
-            if ($this->Tracks_Model->update_track($track)) return "true";
-            else return "false";
+
+            if ($this->Tracks_Model->update_track($track)) {
+
+                // Falls die Sichtbarkeit geändert worden ist, muss ein weiteres Schlüsselpaar angelegt/gelöscht werden
+                $this->Tracks_Model->update_privacy($user_id, $track_id);
+
+                return "true";
+            } else return "false";
         }
         return "false";
+    }
+
+    public function ajax_get_public_tracks_in_bounds()
+    {
+
+        $this->modules->Model->load("Tracks_Model");
+
+        // Die übergebenen Ecken der Karte holen
+        $bounds = $this->modules->Input->post("bounds", false);
+
+        // Alle Einträge aus der Public-Tracks Tabelle holen. (Enthält nur die nötigen Schlüsselpaare und eine Startposition)
+        $tracklist = $this->Tracks_Model->get_public_tracks();
+
+        $result = array();
+
+        // Für jeden Track prüfen ob seine Startkoordinate zu der Kartenansicht passt
+        foreach ($tracklist as $track) {
+
+            $startpoint = json_decode($track["startpoint"]);
+
+            if (is_object($startpoint)) {
+                if ($startpoint->lat >= $bounds["sw"]["lat"] && $startpoint->lat <= $bounds["ne"]["lat"]) {
+                    if ($startpoint->lng >= $bounds["sw"]["lng"] && $startpoint->lng <= $bounds["ne"]["lng"]) {
+                        $result[] = $track;
+                    }
+                }
+            }
+        }
+        exit(json_encode($result));
+
+    }
+
+    public function view_public_track() {
+        $user_id = $this->modules->Input->post("user_id", true);
+        $track_id = $this->modules->Input->post("track_id", true);
+
+        $this->modules->Model->load("Tracks_Model");
+
+        $track = $this->Tracks_Model->get_track($user_id, $track_id);
+
+        if($track) {
+            $this->modules->View->assign("tracklist", array(
+                "tracklist" => array($track),
+                "user_id" => $this->modules->Session->get("user_id")
+            ));
+            $this->modules->View->render();
+        }
+        else echo "Track nicht gefunden :(";
+
     }
 
 
