@@ -13,7 +13,9 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         color: #000000;
         width: 100%;
     }
-
+    button {
+        width: 100%;
+    }
     .track_entry {
         margin-bottom: 30px;
         text-align: center;
@@ -26,7 +28,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
         <div>
             <?php if(isset($track["waypoints_enc"])): ?>
-            <img class="<?php if($track["user_id"] == $user_id) echo "track_img_mine"; else echo "track_img_other"; ?>" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
+            <img class="track_img <?php if($track["user_id"] == $user_id) echo "track_img_mine"; else echo "track_img_other"; ?>" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
                  user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
             <?php endif; ?>
         </div>
@@ -108,6 +110,10 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
             },
             success: function (response) {
                 var waypoints = response.waypoints;
+                for(var i = 0; i < waypoints.length; i++) {
+                    waypoints[i].lng = parseFloat(waypoints[i].lng);
+                    waypoints[i].lat = parseFloat(waypoints[i].lat);
+                }
 
                 // Bisherigen Pfad löschen
                 track_viewed.getPath().clear();
@@ -115,13 +121,13 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 track_viewed.setPath(waypoints);
                 // Wegpunkte Array ebenfalls hinterlegen
                 track_viewed_waypoints = waypoints;
-                track_id_viewed = track_id;
                 // Karte auf Anfangspunkt des Tracks zentrieren.
                 map.setCenter(waypoints[0]);
 
                 // Content Panel und Seitenmenü schließen.
                 $("#content_panel_close").click();
-                $("#back").click();
+                if($("#back").is(":visible"))
+                    $("#back").click();
             }
         })
     });
@@ -144,6 +150,11 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
             },
             success: function (response) {
                 var waypoints = response.waypoints;
+                for(var i = 0; i < waypoints.length; i++) {
+                    waypoints[i].lng = parseFloat(waypoints[i].lng);
+                    waypoints[i].lat = parseFloat(waypoints[i].lat);
+                }
+
 
                 // Bisherigen Pfad löschen
                 public_track.getPath().clear();

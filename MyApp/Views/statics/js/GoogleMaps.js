@@ -26,7 +26,8 @@ function initMap() {
     map_pos = new google.maps.Marker({
         position: {lat: -34.397, lng: 150.644},
         map: map,
-        title: 'Hello World!'
+        title: 'Hello World!',
+        icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
     });
 
     current_track = new google.maps.Polyline({
@@ -81,7 +82,7 @@ function initMap() {
                 data: {
                     track_id: track_id_viewed,
                     user_id: $("#nickname").text(),
-                    waypoints: JSON.stringify(track_viewed_waypoints),
+                    waypoints: track_viewed_waypoints,
                     waypoints_enc: google.maps.geometry.encoding.encodePath(track_viewed.getPath())
                 },
                 success: function () {
@@ -104,7 +105,7 @@ setInterval(function () {
         lng: gps.y()
     };
     if (center) map.setCenter(position);
-    //map_pos.setPosition(position);
+    map_pos.setPosition(position);
 
     // Die Bounds der Karte holen
     bounds = map.getBounds();
@@ -168,7 +169,9 @@ setInterval(function () {
             }
             public_markers = new Array();
             for(var i = 0; i < response.length; i++) {
-                var location = JSON.parse(response[i].startpoint);
+                var location = response[i].startpoint;
+                location.lat = parseFloat(location.lat);
+                location.lng = parseFloat(location.lng);
                 var user_id = response[i].user_id;
                 var track_id = response[i].track_id;
 

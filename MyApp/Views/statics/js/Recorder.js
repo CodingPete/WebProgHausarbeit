@@ -32,8 +32,7 @@ var Recorder = function () {
                 go_to_pause();
                 break;
             case STOP:
-                // Tu nix: Wird direkt bei Stopclick direkt ausgeführt, sonst Gefahr, dass das Interval und Buttonklick sich überschneiden
-                //go_to_stop();
+                go_to_stop();
                 break;
             default:
                 go_to_idle();
@@ -61,8 +60,8 @@ var Recorder = function () {
     });
 
 
-    // Alle 10 Sekunden wird die Statemachine neu aufgerufen um ggf Wegpunkte aufzuzeichnen.
-    setInterval(this.state_machine, 10000);
+    // Alle 5 Sekunden wird die Statemachine neu aufgerufen um ggf Wegpunkte aufzuzeichnen.
+    setInterval(this.state_machine, 5000);
 
     this.getState = function() {
         return state;
@@ -116,20 +115,22 @@ var Recorder = function () {
             },
             success: function (response) {
                 if (response == "true") {
-                    $(view).html("<p>Upload erfolgreich!</p>");
                     var message = "<p>Upload erfolgreich!</p>";
+                    $(view).html(message);
+                    current_track.getPath().clear();
+                    state = IDLE;
                 }
                 else {
                     var message = "<p>Fehler: Abbruch!</p>";
+                    state = IDLE;
                 }
                 setTimeout(function () {
                     $(view).html(message);
-                    current_track.getPath().clear();
                 }, 2000);
-                state = IDLE;
             },
             error: function () {
-                $(view).text("<p>Fehler: Versuche erneut</p>");
+                $(view).html("<p>Fehler: Versuche erneut</p>");
+                state = STOP;
             }
         });
     };

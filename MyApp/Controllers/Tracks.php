@@ -127,6 +127,7 @@ class Tracks extends Framework
             if (is_object($startpoint)) {
                 if ($startpoint->lat >= $bounds["sw"]["lat"] && $startpoint->lat <= $bounds["ne"]["lat"]) {
                     if ($startpoint->lng >= $bounds["sw"]["lng"] && $startpoint->lng <= $bounds["ne"]["lng"]) {
+                        $track["startpoint"] = $startpoint;
                         $result[] = $track;
                     }
                 }

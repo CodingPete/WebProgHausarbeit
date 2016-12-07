@@ -7,11 +7,10 @@
  */
 
 // Redis für Borsti
-//require_once 'C:/RedisDBs/RedisDBs_WS16.php';
+require_once 'C:/RedisDBs/RedisDBs_WS16.php';
 
 define('APP_ROOT', dirname(__FILE__));
-if($_SERVER["HTTPS"]) define('APP_DOMAIN', "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
-else define('APP_DOMAIN', "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+define('APP_DOMAIN', "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 define('APP_STATICS', APP_DOMAIN .  "/MyApp/Views/statics/");
 
 if (!ini_get('display_errors')) {

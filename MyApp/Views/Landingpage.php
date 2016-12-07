@@ -75,86 +75,23 @@
         border-radius: 5px;
         cursor: pointer;
     }
+
     #map {
         height: 100%;
     }
 </style>
 <div class="container-fluid">
-    <div class="row">
-        <div class="card card-inverse">
-            <img class="card-img" src="<?= APP_STATICS; ?>jogger-1763571_1920.jpg">
-            <div class="card-img-overlay">
-                <div class="info_text_container first_info_text_container">
-                    <img id="app_logo" src="<?= APP_STATICS; ?>pictogram-1616719_1280.png">
-                    <h1>MyTrack</h1>
-                    <h4>Deine ultimative Bewegungs - App</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="page_container">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="card card-inverse">
-                <img class="card-img" src="<?= APP_STATICS; ?>jogging-1722552_1920.jpg">
-                <div class="card-img-overlay">
-                    <div class="col-xs-6 hidden-xs-down"></div>
-                    <div class="col-xs-12 col-md-6 info_text_container">
-                        <p>Deine Freunde sagen, du solltest mal mehr rausgehen aber du sitzt lieber vor'm
-                            Bildschirm?</p>
-                        <p>Mit MyTrack kannst du deinen Bildschirm jetzt mitnehmen und deine Fortbewegung
-                            aufzeichnen!</p>
-                        <p>Lust auf Feedback? Teile deine Strecken mit deinen Freunden via Twitter, Facebook und co.</p>
-                    </div>
 
-                </div>
-            </div>
-        </div>
-        <div class="stuff">
-            <i class="material-icons" style="font-size: 2em;">directions_run</i>
-            <i class="fa fa-motorcycle fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-bicycle fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-ship fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-car fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-truck fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
-            <i class="fa fa-wheelchair-alt fa-2x" aria-hidden="true"></i>
-        </div>
-        <div class="row">
-            <div class="card card-inverse">
-                <img class="card-img" src="<?= APP_STATICS; ?>running-573762_1280.jpg">
-                <div class="card-img-overlay">
-                    <div class="col-xs-12 col-md-6 info_text_container">
-                        <p>Laufen ist doof? Dann nimm dein Fahrrad! Lustiger Weise funktioniert das ganze auch mit
-                            Motorrad,
-                            Auto,
-                            Boot
-                            und Panzer</p>
-                        <form class="register_form">
-                            <input type="text" name="username" placeholder="Benutzername" required>
-                            <input type="password" name="password" placeholder="Passwort" required>
-                            <input type="password" name="password_validation" placeholder="Passwort erneut eingeben" required>
-                            <input type="submit" value="Registrieren">
-                        </form>
-                        <form class="login_form">
-                            <input type="text" name="username" placeholder="Dein Nickname" required>
-                            <input type="password" name="password" placeholder="Dein Password" required>
-                            <input type="submit" value="Login">
-                        </form>
-                        <div id="map"></div>
-                    </div>
-                    <div class="col-xs-6 hidden-xs-down"></div>
+    <form class="register_form">
+        <input type="text" name="username" placeholder="Benutzername" required>
+        <input type="password" name="password" placeholder="Passwort" required>
+        <input type="password" name="password_validation" placeholder="Passwort erneut eingeben" required>
+        <input type="submit" value="Registrieren">
+    </form>
+    <form class="login_form">
+        <input type="text" name="username" placeholder="Dein Nickname" required>
+        <input type="password" name="password" placeholder="Dein Password" required>
+        <input type="submit" value="Login">
+    </form>
 
-                </div>
-            </div>
-        </div>
-        <div class="stuff">
-            <i class="fa fa-twitter social_network" aria-hidden="true"></i>
-            <i class="fa fa-facebook-square social_network" aria-hidden="true"></i>
-            <i class="fa fa-tumblr social_network" aria-hidden="true"></i>
-            <i class="fa fa-instagram social_network" aria-hidden="true"></i>
-        </div>
-
-    </div>
 </div>

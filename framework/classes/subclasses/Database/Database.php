@@ -17,6 +17,7 @@ class Database extends Redis
             $config->redis_credentials["port"]);
 
         $this->select($config->redis_db);
+        //$this->flushDB();
     }
 
 }
