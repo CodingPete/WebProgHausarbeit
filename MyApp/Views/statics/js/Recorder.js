@@ -81,6 +81,7 @@ var Recorder = function () {
         var waypoint = {
             lat: gps.x(),
             lng: gps.y(),
+            alt: gps.z(),
             timestamp: Date.now(),
             is_start: is_start
         };
@@ -110,7 +111,7 @@ var Recorder = function () {
                     user_id: $("#nickname").text(),
                     waypoints: waypoints,
                     waypoints_enc: google.maps.geometry.encoding.encodePath(current_track.getPath()),
-                    privacy: 'private',
+                    privacy: 'private'
                 })
             },
             success: function (response) {

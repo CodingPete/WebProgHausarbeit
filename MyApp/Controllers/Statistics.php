@@ -20,19 +20,66 @@ class Statistics extends Framework
         header("Location: " . APP_DOMAIN);
     }
 
-    public function get_overall_stats() {
+    public function get_overall_stats()
+    {
 
         echo "ERGEBNIS";
     }
 
-    public function get_track_stats() {
+    public function get_track_stats()
+    {
 
         $user_id = $this->modules->Input->post("user_id", true);
         $track_id = $this->modules->Input->post("track_id", true);
 
-        $delete_button = "<button class='btn btn-danger delete' user='$user_id' track='$track_id'>Löschen</button>";
+        $error = array();
+
+        $this->modules->Model->load("Track_Model");
+
+        $track = $this->Tracks_Model->get_track($user_id, $track_id);
+
+        // Wenn der Track gültig ist
+        if($track) {
+
+            // Hole gesäuberte Wegpunkte
+            $waypoints = $this->strip_waypoints($track["waypoints"]);
+
+            // Wenn nach dem Filter noch mindestens 2 Wegpunkte vorhanden sind ...
+            if(count($waypoints) > 1) {
+
+                // ... nur dann macht es Sinn Statistiken zu erstellen.
+
+            }
+            else $error[] = "Es konnten keine Statistiken erstellt werden :(";
+        }
+        else $error[] = "Fehler im Track :(";
+
+        // Gab es Fehler? Wenn ja ausgeben
+        if(!empty($error)) {
+            foreach($error as $err) echo $err;
+        }
+
+        $delete_button = "<button class='btn btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
 
         echo $delete_button;
     }
 
+    /**
+     * @param $waypoints Zu bearbeitende Wegpunkte
+     * @return array Wegpunkte ohne Einträge mit fehlendem Timestamp
+     */
+    private function strip_waypoints($waypoints)
+    {
+        $result = array();
+        foreach($waypoints as $waypoint) {
+            if(isset($waypoint->timestamp)) {
+                $result[] = $waypoint;
+            }
+        }
+        return $result;
+    }
+
+    private function svg_altitude() {
+
+    }
 }
