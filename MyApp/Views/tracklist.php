@@ -26,7 +26,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
         <div>
             <?php if(isset($track["waypoints_enc"])): ?>
-            <img class="track_img" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
+            <img class="<?php if($track["user_id"] == $user_id) echo "track_img_mine"; else echo "track_img_other"; ?>" src="<?= $static_maps_url . $track["waypoints_enc"] . $static_maps_key; ?>"
                  user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
             <?php endif; ?>
         </div>
@@ -90,7 +90,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         });
     });
 
-    $(".track_img").on("click", function () {
+    $(".track_img_mine").on("click", function () {
 
         set_centering(false);
 
@@ -122,6 +122,39 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 // Content Panel und Seitenmenü schließen.
                 $("#content_panel_close").click();
                 $("#back").click();
+            }
+        })
+    });
+
+    $(".track_img_others").on("click", function () {
+
+        set_centering(false);
+
+        // Laden des ausgewählten Tracks.
+        var track_id = $(this).attr("track");
+        var user_id = $(this).attr("user");
+
+        $.ajax({
+            type: "POST",
+            url: APP_DOMAIN + "index.php?c=Tracks&f=ajax_get_track",
+            dataType: "json",
+            data: {
+                user_id: user_id,
+                track_id: track_id
+            },
+            success: function (response) {
+                var waypoints = response.waypoints;
+
+                // Bisherigen Pfad löschen
+                public_track.getPath().clear();
+                // Wegpunkte in die Karte zeichnen
+                public_track.setPath(waypoints);
+
+                // Karte auf Anfangspunkt des Tracks zentrieren.
+                map.setCenter(waypoints[0]);
+
+                // Content Panel schließen.
+                $("#content_panel_close").click();
             }
         })
     });
