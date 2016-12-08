@@ -61,7 +61,7 @@ class Statistics extends Framework
         }
 
         if($this->modules->Session->get("user_id") == $user_id) {
-            $delete_button = "<button class='btn btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
+            $delete_button = "<button class='btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
             echo $delete_button;
         }
     }

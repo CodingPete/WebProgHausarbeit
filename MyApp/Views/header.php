@@ -47,15 +47,17 @@
         }
         a {
             padding: 1.2em;
-        }
-        a:hover {
-            color: #EEEEF4;
-            background-color: rgba(106,128,167, 0.2);
-            border-radius: 5px;
-            padding: 1.2em;
+            width: 100%;
+            margin-bottom: 30px;
+            background-color: rgba(67, 79, 100, 1);
+            color: #FFFFFF;
         }
         a:visited {
-            color: #EEEEF4;
+            color: #FFFFFF;
+        }
+
+        a:hover: {
+            color: #FFFFFF;
         }
         .container-fluid {
             margin: 0 auto;

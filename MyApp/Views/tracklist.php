@@ -10,11 +10,20 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
 ?>
 <style>
     select {
-        color: #000000;
+        color: #FFFFFF;
         width: 100%;
+        margin-bottom: 30px;
+        background-color: rgba(67, 79, 100, 1);
     }
     button {
         width: 100%;
+        color: #FFFFFF;
+    }
+
+    .btn {
+        background-color: rgba(67, 79, 100, 1);
+        border: none;
+        color: #FFFFFF;
     }
     .track_entry {
         margin-bottom: 30px;
@@ -25,6 +34,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     }
 </style>
 <?php foreach ($tracklist as $track): ?>
+    <?php $track_id = $track["track_id"]; $user_id = $track["user_id"]; ?>
     <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
         <div>
             <?php if(isset($track["waypoints_enc"])): ?>
@@ -41,6 +51,10 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
                 <?php endif; ?>
             </p>
         </div>
+        <a class="btn" href="<?=APP_DOMAIN . "index.php?c=Tracks&f=download_xml&user_id=$user_id&track_id=$track_id";?>">
+                <i class="fa fa-download" id="download" aria-hidden="true" user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>"></i>
+        </a>
+
         <?php if($track["user_id"] == $user_id): ?>
         <div>
             <select user="<?= $track["user_id"]; ?>" track="<?= $track["track_id"]; ?>">
@@ -62,7 +76,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
             </select>
         </div>
         <?php endif; ?>
-        <button class="btn btn-secondary collapse_stats" type="button" data-toggle="collapse"
+        <button class="btn collapse_stats" type="button" data-toggle="collapse"
                 data-target="#stats_<?= $track["track_id"]; ?>" aria-expanded="false"
                 aria-controls="#stats_<?= $track["track_id"]; ?>">
             Statisik ansehen

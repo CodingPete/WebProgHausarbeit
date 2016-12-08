@@ -156,6 +156,40 @@ class Tracks extends Framework
 
     }
 
+    public function download_xml() {
+        $this->modules->Model->load("Tracks_Model");
+
+        $user_id = $this->modules->Input->get("user_id", true);
+        $track_id = $this->modules->Input->get("track_id", true);
+
+        $track = $this->Tracks_Model->get_track($user_id, $track_id);
+
+        if($track) {
+            $gpx = new SimpleXMLElement("<gpx></gpx>");
+            $gpx->addAttribute("version", "1.1");
+            $gpx->addAttribute("creator", "MyTrack");
+
+            for($i = 0; $i < count($track["waypoints"]); $i++) {
+                $wpt = $gpx->addChild("wpt");
+                $wpt->addAttribute("lat", $track["waypoints"][$i]->lat);
+                $wpt->addAttribute("lon", $track["waypoints"][$i]->lng);
+                if(isset($track["waypoints"][$i]->alt)) {
+                    $ele = $wpt->addChild("ele", $track["waypoints"][$i]->alt);
+                }
+                else $ele = $wpt->addChild("ele", 0);
+                if(isset($track["waypoints"][$i]->alt)) {
+                    $time = $wpt->addChild("time", date("Y-d-mTG:i:sz", $track["waypoints"][$i]->timestamp / 1000));
+                }
+                else $time = $wpt->addChild("time", 0);
+                $name = $wpt->addChild("name", $i);
+
+            }
+            header('Content-type: text/xml');
+            header('Content-Disposition: attachment; filename="'.$user_id.'_'.$track_id.'.xml"');
+            echo $gpx->asXML();
+        }
+    }
+
     public function upload_xml_html()
     {
         $this->modules->View->assign("xml_upload");

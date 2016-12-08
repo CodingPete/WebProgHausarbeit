@@ -120,7 +120,7 @@
             </div>
         </div>
         <div id="side_bar_lower">
-            <div class="side_bar_link" controller="Tracks" func="ajax_get_track_list_html">
+            <div class="side_bar_link" id="Tracks" controller="Tracks" func="ajax_get_track_list_html">
             <span>
             <i class="fa fa-history" aria-hidden="true"></i>
                 </span>
