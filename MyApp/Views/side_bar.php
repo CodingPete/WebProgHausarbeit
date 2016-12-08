@@ -126,6 +126,12 @@
                 </span>
                 Meine Tracks
             </div>
+            <div class="side_bar_link" controller="Tracks" func="upload_xml_html">
+            <span>
+            <i class="fa fa-upload" aria-hidden="true"></i>
+                </span>
+                GPX Upload
+            </div>
             <div class="side_bar_link" controller="" func="statistics">
             <span>
             <i class="fa fa-line-chart" aria-hidden="true"></i>

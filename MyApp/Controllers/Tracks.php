@@ -137,7 +137,8 @@ class Tracks extends Framework
 
     }
 
-    public function view_public_track() {
+    public function view_public_track()
+    {
         $user_id = $this->modules->Input->post("user_id", true);
         $track_id = $this->modules->Input->post("track_id", true);
 
@@ -145,75 +146,120 @@ class Tracks extends Framework
 
         $track = $this->Tracks_Model->get_track($user_id, $track_id);
 
-        if($track) {
+        if ($track) {
             $this->modules->View->assign("tracklist", array(
                 "tracklist" => array($track),
                 "user_id" => $this->modules->Session->get("user_id")
             ));
             $this->modules->View->render();
+        } else echo "Track nicht gefunden :(";
+
+    }
+
+    public function upload_xml_html()
+    {
+        $this->modules->View->assign("xml_upload");
+        $this->modules->View->render();
+    }
+
+    public function upload_xml()
+    {
+        $this->modules->Model->load("Tracks_Model");
+
+        $filename = $_FILES['gpx_file']['name'];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+        if ($ext == "gpx" || $ext == "GPX") {
+
+            $gpx_string = file_get_contents($_FILES["gpx_file"]["tmp_name"]);
+
+            $xml = simplexml_load_string($gpx_string) or die("Ungültige Datei :(");
+
+            $waypoints = array();
+
+            foreach ($xml->wpt as $waypoint) {
+                $waypoints[] = (object)array(
+                    "lat" => (string)$waypoint->attributes()["lat"],
+                    "lng" => (string)$waypoint->attributes()["lon"],
+                    "alt" => (string)$waypoint->ele,
+                    "timestamp" => strtotime((string)$waypoint->time),
+                );
+            }
+
+            $track = array(
+                "duration" => 0,
+                "waypoints" => $waypoints,
+                "user_id" => $this->modules->Session->get("user_id"),
+                "privacy" => "private",
+                "starttime" => $waypoints[0]->timestamp,
+                "track_id" => "dont-care",
+                "waypoints_enc" => $this->encode_path($waypoints)
+            );
+
+            if ($this->Tracks_Model->create_track($track)) exit("true");
+            else exit("false");
         }
-        else echo "Track nicht gefunden :(";
-
+        exit("false");
     }
 
-
-    public
-    function test_get_tracks_on_user()
+    // Auf Basis von https://developers.google.com/maps/documentation/utilities/polylinealgorithm?hl=de
+    private function encode_path($waypoints)
     {
-        $test_user_id = "peter.meyer.fl@googlemail.com";
+        $result = "";
 
-        $this->modules->Model->load("Tracks_Model");
+        for ($i = 0; $i < count($waypoints); $i++) {
 
-        echo "<pre>";
-        print_r($this->Tracks_Model->get_tracks_on_user($test_user_id));
-        echo "</pre>";
+            $current = $waypoints[$i];
+            if ($i > 0) $previous = $waypoints[$i - 1];
+            else $previous = null;
+
+            // Falls der erste Wegpunkt vorliegt, ...
+            if (is_null($previous)) {
+                // ... dann kann die erste Codierung ohne Offset berechnet werden
+                $result .= $this->encode_coord_part($current->lat);
+                $result .= $this->encode_coord_part($current->lng);
+            }
+            // ... ansonsten die Differenz vom vorherigen Wegpunkt zur codierung heranziehen
+            else {
+                $difference_lat = $current->lat - $previous->lat;
+                $difference_lng = $current->lng - $previous->lng;
+
+                $result .= $this->encode_coord_part($difference_lat);
+                $result .= $this->encode_coord_part($difference_lng);
+            }
+
+        }
+        return $result;
     }
 
-    public
-    function test_create_track()
-    {
-
-        $test_track = array(
-            "track_id" => "dont-care",
-            "user_id" => "peter.meyer.fl@googlemail.com",
-            "waypoints" => "dont-care",
-            "privacy" => "public"
-        );
-
-
-        $this->modules->Model->load("Tracks_Model");
-
-        echo $this->Tracks_Model->create_track($test_track);
-    }
-
-    public
-    function test_get_track()
+    private function encode_coord_part($value)
     {
 
-        $test_user_id = "peter.meyer.fl@googlemail.com";
-        $test_track_id = 5;
+        $result = "";
 
-        $this->modules->Model->load("Tracks_Model");
+        // Wert * 10 Hoch 5 rechnen
+        $initial = $value = $value * pow(10, 5);
 
-        echo "<pre>";
-        print_r($this->Tracks_Model->get_track($test_user_id, $test_track_id));
-        echo "</pre>";
+        // Ursprüngliche Fließkommazahl runden und dann zu Integer casten
+        $value = (int)round($value);
+
+        // Shift links
+        $value <<= 1;
+
+        // Wenn der Eingangswert kleiner null ist, dann den Wert invertieren.
+        if ($initial < 0) $value = ~$value;
+
+        // Solange noch mehr als 5 Bits vorhanden sind
+        while ($value >= 32) {
+            // Wert auf länge bringen, verodern, + 63 und dann zu Ascii
+            $result .= chr((32 | ($value & 31)) + 63);
+            // Zum nächsten 5 Bit Chunk shiften
+            $value >>= 5;
+        }
+
+        // Letzten 5 Bit Chunk auch +63 und zu Ascii
+        $result .= chr($value + 63);
+
+        return $result;
     }
 
-    public
-    function test_update_track()
-    {
-        $test_track = array(
-            "track_id" => "5",
-            "user_id" => "peter.meyer.fl@googlemail.com",
-            "waypoints" => "4xRechts nach Panama",
-            "privacy" => "private"
-        );
-
-        $this->modules->Model->load("Tracks_Model");
-
-        echo "<pre>";
-        print_r($this->Tracks_Model->update_track($test_track));
-        echo "</pre>";
-    }
 }
