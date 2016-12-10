@@ -165,28 +165,38 @@ class Tracks extends Framework
         $track = $this->Tracks_Model->get_track($user_id, $track_id);
 
         if($track) {
-            $gpx = new SimpleXMLElement("<gpx></gpx>");
-            $gpx->addAttribute("version", "1.1");
-            $gpx->addAttribute("creator", "MyTrack");
+
+            $document = new DOMDocument();
+            $document->formatOutput = true;
+
+            $gpx = $document->createElement("gpx");
+            $gpx->setAttribute("version", "1.1");
+            $gpx->setAttribute("creator", "MyTrack");
+            $document->appendChild($gpx);
 
             for($i = 0; $i < count($track["waypoints"]); $i++) {
-                $wpt = $gpx->addChild("wpt");
-                $wpt->addAttribute("lat", $track["waypoints"][$i]->lat);
-                $wpt->addAttribute("lon", $track["waypoints"][$i]->lng);
+                $wpt = $document->createElement("wpt");
+                $wpt->setAttribute("lat", $track["waypoints"][$i]->lat);
+                $wpt->setAttribute("lon", $track["waypoints"][$i]->lng);
                 if(isset($track["waypoints"][$i]->alt)) {
-                    $ele = $wpt->addChild("ele", $track["waypoints"][$i]->alt);
+                    $ele = $document->createElement("ele");
+                    $ele->appendChild($document->createTextNode($track["waypoints"][$i]->alt));
+                    $wpt->appendChild($ele);
                 }
-                else $ele = $wpt->addChild("ele", 0);
-                if(isset($track["waypoints"][$i]->alt)) {
-                    $time = $wpt->addChild("time", date("Y-d-mTG:i:sz", $track["waypoints"][$i]->timestamp / 1000));
+                if(isset($track["waypoints"][$i]->timestamp)) {
+                    $time = $document->createElement("time");
+                    $time->appendChild($document->createTextNode(date("c", $track["waypoints"][$i]->timestamp / 1000)));
+                    $wpt->appendChild($time);
                 }
-                else $time = $wpt->addChild("time", 0);
-                $name = $wpt->addChild("name", $i);
+                $name = $document->createElement("name");
+                $name->appendChild($document->createTextNode($i));
+                $wpt->appendChild($name);
+                $gpx->appendChild($wpt);
 
             }
             header('Content-type: text/xml');
-            header('Content-Disposition: attachment; filename="'.$user_id.'_'.$track_id.'.xml"');
-            echo $gpx->asXML();
+            header('Content-Disposition: attachment; filename="'.$user_id.'_'.$track_id.'.gpx"');
+            echo $document->saveXML();
         }
     }
 
@@ -206,18 +216,23 @@ class Tracks extends Framework
 
             $gpx_string = file_get_contents($_FILES["gpx_file"]["tmp_name"]);
 
-            $xml = simplexml_load_string($gpx_string) or die("Ungültige Datei :(");
+            $xml = new DOMDocument();
+
+            $xml->loadXML($gpx_string);
 
             $waypoints = array();
 
-            foreach ($xml->wpt as $waypoint) {
+
+            foreach ($xml->getElementsByTagName("wpt") as $waypoint) {
+
                 $waypoints[] = (object)array(
-                    "lat" => (string)$waypoint->attributes()["lat"],
-                    "lng" => (string)$waypoint->attributes()["lon"],
-                    "alt" => (string)$waypoint->ele,
-                    "timestamp" => strtotime((string)$waypoint->time),
+                    "lat" => (string)$waypoint->getAttribute("lat"),
+                    "lng" => (string)$waypoint->getAttribute("lon"),
+                    "alt" => (string)$waypoint->getElementsByTagName("ele")->item(0)->nodeValue,
+                    "timestamp" => date("U", strtotime((string)$waypoint->getElementsByTagName("time")->item(0)->nodeValue)) * 1000,
                 );
             }
+
 
             $track = array(
                 "duration" => 0,
@@ -293,7 +308,8 @@ class Tracks extends Framework
         // Letzten 5 Bit Chunk auch +63 und zu Ascii
         $result .= chr($value + 63);
 
-        return $result;
+
+        return addslashes($result);
     }
 
 }

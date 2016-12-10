@@ -7,7 +7,7 @@
  */
 ?>
 <div>
-    <form id="xml_upload" action="<?= APP_DOMAIN . "index.php?c=Tracks&f=upload_xml";?>" method="post" enctype="multipart/form-data">
+    <form id="xml_upload" enctype="multipart/form-data">
         GPX Upload
         <input type="file" name="gpx_file" id="gpx_file">
         <input type="submit" value="Upload GPX" name="submit">
@@ -23,7 +23,7 @@
         formData.append('gpx_file', $('#gpx_file')[0].files[0]);
 
         $.ajax({
-            url: $(this).attr("action"),
+            url: APP_DOMAIN + "index.php?c=Tracks&f=upload_xml",
             data: formData,
             processData: false,
             contentType: false,

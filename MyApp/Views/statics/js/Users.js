@@ -3,21 +3,21 @@
  */
 function register(form) {
     $.ajax({
-        type: "POST",
+        method: "POST",
         url: APP_DOMAIN + "index.php?c=Users&f=register",
         data: form.serialize(),
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
             var formData = form.serializeArray();
             var password1 = formData[1].value;
             var password2 = formData[2].value;
 
-            if(password1 != password2) {
+            if (password1 != password2) {
                 alert("Passwörter stimmen nicht überein!");
                 xhr.abort();
             }
         },
-        success: function(response) {
-            if(response == "true") {
+        success: function (response) {
+            if (response == "true") {
                 alert("registriert!");
                 login(form);
             }
@@ -28,12 +28,12 @@ function register(form) {
 
 function login(form) {
     $.ajax({
-        type: "POST",
+        method: "POST",
         url: APP_DOMAIN + "index.php?c=Users&f=login",
         data: form.serialize(),
-        success: function(response) {
-            if(response == "true") {
-                location.reload();
+        success: function (response) {
+            if (response == "true") {
+                window.location.reload();
             }
             else alert("Login fehlgeschlagen!");
         }
@@ -43,39 +43,39 @@ function login(form) {
 function logout() {
     console.log("Logout");
     $.ajax({
-        type: "POST",
+        method: "POST",
         url: APP_DOMAIN + "index.php?c=Users&f=logout",
         data: {},
-        success: function() {
-            alert("Benutzer ausgeloggt");
-            location.reload();
+        success: function () {
+
+            window.location.reload();
         }
     })
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
 
-    $(".register_form").on("submit", function(e) {
+    $(".register_form").on("submit", function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
         register($(this));
     });
 
-    $(".login_form").on("submit", function(e) {
+    $(".login_form").on("submit", function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
         login($(this));
     });
 
-    $(".logout").on("click", function() {
-       logout() ;
+    $(".logout").on("click", function () {
+        logout();
     });
 
     $.ajax({
         method: "POST",
         url: APP_DOMAIN + "index.php?c=Users&f=ajax_get_avatar",
-        success: function(response) {
-            if(response !== "false")
+        success: function (response) {
+            if (response !== "false")
                 $("#avatar").attr("src", response);
         }
     })

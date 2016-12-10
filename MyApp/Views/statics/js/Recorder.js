@@ -81,6 +81,7 @@ var Recorder = function () {
             lat: gps.x(),
             lng: gps.y(),
             alt: gps.z(),
+            speed: gps.v(),
             timestamp: Date.now(),
             is_start: is_start
         };

@@ -6,6 +6,7 @@ GPS = function() {
     var latitude = 0;
     var longitude = 0;
     var altitude = 0;
+    var velocity = 0;
 
     var watch_id;
 
@@ -13,7 +14,7 @@ GPS = function() {
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
         altitude = position.coords.altitude;
-
+        velocity = position.coords.speed;
     };
 
     this.x = function() {
@@ -24,6 +25,9 @@ GPS = function() {
     };
     this.z = function() {
         return altitude;
+    };
+    this.v = function() {
+        return velocity;
     };
 
 
