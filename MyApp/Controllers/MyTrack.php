@@ -7,12 +7,15 @@ defined('APP_ROOT') or exit("kthxbai");
  * Date: 11.11.2016
  * Time: 19:14
  */
+
+// Einstiegscontroller der Website
 class MyTrack extends Framework
 {
     public function __construct()
     {
         parent::__construct();
     }
+
 
     public function index()
     {

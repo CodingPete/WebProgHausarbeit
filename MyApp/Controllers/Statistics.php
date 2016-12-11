@@ -22,10 +22,10 @@ class Statistics extends Framework
 
     public function get_overall_stats()
     {
-
-        echo "ERGEBNIS";
+        // todo: Gesamtstatistiken anlegen.
     }
 
+    // Liefert die Statisken eines Tracks
     public function get_track_stats()
     {
 
@@ -82,12 +82,14 @@ class Statistics extends Framework
             echo "Es konnten keine Statistiken erstellt werden :(";
         }
 
+        // Wenn der eingeloggte Benutzer gleich dem Besitzer ist, Löschenbutton anbieten.
         if ($this->modules->Session->get("user_id") == $user_id) {
             $delete_button = "<button class='btn-danger delete' user='$user_id' track='$track_id'>Track löschen</button>";
             echo $delete_button;
         }
     }
 
+    // Erstellt das Geschwindigkeitsdiagramm
     private function svg_speed($waypoints)
     {
        foreach($waypoints as $waypoint) {
@@ -144,6 +146,7 @@ class Statistics extends Framework
         return $graph->saveHTML();
     }
 
+    // Erstellt das Durchschnittsgeschwindigkeitsdiagramm
     private function svg_speed_average($waypoints)
     {
         foreach($waypoints as $waypoint) {
@@ -200,7 +203,7 @@ class Statistics extends Framework
         return $graph->saveHTML();
     }
 
-
+    // Erstellt das Höhendiagramm
     private function svg_altitude($waypoints) {
         foreach($waypoints as $waypoint) {
 
@@ -217,7 +220,7 @@ class Statistics extends Framework
         // Höhe des Diagramms
         $chart_height = 100;
 
-        // Höchste erreichte Geschwindigkeit als Maximalauschlag des Graphen
+        // Höchste erreichte Höhe als Maximalauschlag des Graphen
         $max = max($alt);
         if($max <= 0) return "";
 
@@ -256,6 +259,7 @@ class Statistics extends Framework
         return $graph->saveHTML();
     }
 
+    // Erstellt das kummulierte Höhendiagramm
     private function svg_altitude_kum($waypoints) {
 
         foreach($waypoints as $waypoint) {
@@ -278,7 +282,7 @@ class Statistics extends Framework
         // Höhe des Diagramms
         $chart_height = 100;
 
-        // Höchste erreichte Geschwindigkeit als Maximalauschlag des Graphen
+        // Höchste erreichte Höhe als Maximalauschlag des Graphen
         $max = max($alt);
         if($max <= 0) return "";
 
@@ -317,6 +321,7 @@ class Statistics extends Framework
         return $graph->saveHTML();
     }
 
+    // Erstellt ein Chart Grundgerüst mit Skala
     private function svg_init_and_scale($chart_width, $chart_height, $scale_width, $max) {
         // Svg Element erstellen.
         $graph = new DomDocument();
@@ -383,9 +388,8 @@ class Statistics extends Framework
         return $graph;
     }
 
-    /**
-     * Berechnet die Länge eines Tracks
-     */
+
+    //Berechnet die Länge eines Track
     private function info_distance($waypoints) {
 
         $distance = 0;
@@ -397,9 +401,7 @@ class Statistics extends Framework
         return number_format($distance, 2);
     }
 
-    /**
-     * Berechnet die kummulierte Höhe
-     */
+    // Berechnet die kumulierte Höhe
     private function info_altitude($waypoints) {
         $altitude = 0;
 
@@ -410,6 +412,7 @@ class Statistics extends Framework
         return number_format($altitude, 2);
     }
 
+    // Berechnet die höchste erreichte Geschwindigkeit
     private function info_max_speed($waypoints) {
         foreach($waypoints as $waypoint) {
 
@@ -421,6 +424,7 @@ class Statistics extends Framework
         return number_format(max($speed), 2);
     }
 
+    // Berechnet die Durchschnittsgeschwindigkeit
     private function info_avg_speed($waypoints) {
         $speed = array();
 
@@ -431,6 +435,7 @@ class Statistics extends Framework
         return number_format($this->average($speed, count($speed)), 2);
     }
 
+    // Berechnet die höchste Höhe
     private function info_max_alt($waypoints) {
         foreach($waypoints as $waypoint) {
 
@@ -486,10 +491,7 @@ class Statistics extends Framework
         else return $values[0];
     }
 
-    /**
-     * @param $waypoints Zu bearbeitende Wegpunkte
-     * @return array Wegpunkte ohne Einträge mit fehlendem Timestamp
-     */
+    // Kickt unbrauchbare Wegpunkte heraus.
     private function strip_waypoints($waypoints)
     {
         $result = array();

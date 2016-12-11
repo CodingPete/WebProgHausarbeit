@@ -8,7 +8,9 @@ defined('APP_ROOT') or exit("kthxbai");
  */
 class View
 {
+    // Hier werden die Views abgelegt.
     private $payload = [];
+    // Hier werden die Variablen der Views abgelegt.
     private $variables = [];
     private $framework;
 
@@ -17,6 +19,7 @@ class View
         return $this;
     }
 
+    // Lädt den Inhalt einer View
     public function assign($view, $data = []) {
         $path = APP_ROOT
             .DIRECTORY_SEPARATOR
@@ -26,16 +29,25 @@ class View
             .DIRECTORY_SEPARATOR
             .$view
             .".php";
+
+        // Wenn die View-Datei existiert, ...
         if(is_file($path)) {
+
+            // ... Pfad zu dieser Datei für den Renderer ablegen.
             $this->payload[] = $path;
+            // ... und jede Variable für den Renderer ablegen.
             foreach($data as $index => $value) $this->variables[$index] = $value;
             return true;
         }
         else return false;
     }
 
+    // Baut die Views auf
     public function render() {
+
+        // Jede Variable laden.
         foreach($this->variables as $index => $value) $$index = $value;
+        // Jede View laden.
         foreach($this->payload as $parse) require($parse);
     }
 

@@ -18,6 +18,7 @@ class Config {
         "Router" => 2
     );
 
+    // todo: Authentifizierung implementieren
     public $redis_credentials = array(
         "host" => "localhost",
         "port" => "6379",

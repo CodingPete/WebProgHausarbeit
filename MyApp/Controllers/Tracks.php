@@ -12,17 +12,22 @@ class Tracks extends Framework
     public function __construct()
     {
         parent::__construct();
+
+        // Wenn kein Nutzer in der Session vorliegt, dann soll der weg.
         if ($this->modules->Session->get("user_type") != "user") $this->index();
     }
 
     public function index()
     {
+        // Nutzer umleiten auf Hauptseite.
         header("Location: " . APP_DOMAIN);
     }
 
 
+    // Gibt die Trackliste aus
     public function ajax_get_track_list_html()
     {
+        // Holt eine Liste der Tracks und die User_ID und schreibt diese in die View.
         $this->modules->View->assign("tracklist", array(
             "tracklist" => $this->get_tracks_on_user(),
             "user_id" => $this->modules->Session->get("user_id")
@@ -30,6 +35,7 @@ class Tracks extends Framework
         $this->modules->View->render();
     }
 
+    // Holt einen Track aus der Datenbank
     public function ajax_get_track()
     {
         $this->modules->Model->load("Tracks_Model");
@@ -41,11 +47,11 @@ class Tracks extends Framework
         exit(json_encode($track));
     }
 
+    // Liefert alle Tracks eines Users.
     private function get_tracks_on_user()
     {
         $this->modules->Model->load("Tracks_Model");
 
-        //$user_id = $this->modules->Input->post("user_id", true);
         $user_id = $this->modules->Session->get("user_id");
 
         $tracks_on_user = $this->Tracks_Model->get_tracks_on_user($user_id);
@@ -53,7 +59,7 @@ class Tracks extends Framework
         return $tracks_on_user;
     }
 
-
+    // Erstellt einen Track in der Datenbank
     public function ajax_create_track()
     {
         $this->modules->Model->load("Tracks_Model");
@@ -64,6 +70,7 @@ class Tracks extends Framework
         else exit("false");
     }
 
+    // Löscht einen Track aus der Datenbank
     public function ajax_delete_track()
     {
         $this->modules->Model->load("Tracks_Model");
@@ -75,6 +82,7 @@ class Tracks extends Framework
 
     }
 
+    // Ändert einen Track in der Datenbank
     public function ajax_update_track()
     {
         $this->modules->Model->load("Tracks_Model");
@@ -85,16 +93,22 @@ class Tracks extends Framework
         $track = $this->Tracks_Model->get_track($user_id, $track_id);
 
         if ($track) {
+
+            // Alle Werte die im Track vorliegen.
             $keys = array_keys($track);
 
             foreach ($keys as $key) {
+
+                // Jeden Key aus den Post-Parametern holen.
                 $field_to_change = $this->modules->Input->post($key, false);
+                // Wenn es einen gültigen Post-Parameter gibt.
                 if ($field_to_change) {
+                    // Dann den Track an dieser Stelle updaten.
                     $track[$key] = $field_to_change;
                 }
             }
 
-
+            // Änderungen in die Datenbank schreiben.
             if ($this->Tracks_Model->update_track($track)) {
 
                 // Falls die Sichtbarkeit geändert worden ist, muss ein weiteres Schlüsselpaar angelegt/gelöscht werden
@@ -106,6 +120,7 @@ class Tracks extends Framework
         return "false";
     }
 
+    // Holt alle freigegebenen Tracks die innerhalb des Kartenausschnittes liegen.
     public function ajax_get_public_tracks_in_bounds()
     {
 
@@ -125,9 +140,13 @@ class Tracks extends Framework
             $startpoint = json_decode($track["startpoint"]);
 
             if (is_object($startpoint)) {
+                // Liegt die Startposition des Tracks innerhalb der Latitude oben links und unten rechts der karte?
                 if ($startpoint->lat >= $bounds["sw"]["lat"] && $startpoint->lat <= $bounds["ne"]["lat"]) {
+                    // Liegt die Startposition des Tracks innerhalb der Longitude oben links und unten rechts der karte?
                     if ($startpoint->lng >= $bounds["sw"]["lng"] && $startpoint->lng <= $bounds["ne"]["lng"]) {
+                        // Dann Startpoint setzen
                         $track["startpoint"] = $startpoint;
+                        // und an das Array der beim Client anzuzeigenden Tracks kleben.
                         $result[] = $track;
                     }
                 }
@@ -137,6 +156,7 @@ class Tracks extends Framework
 
     }
 
+    // Holt einen Public-Track und rendert die Trackliste für diesn
     public function view_public_track()
     {
         $user_id = $this->modules->Input->post("user_id", true);
@@ -156,44 +176,56 @@ class Tracks extends Framework
 
     }
 
+    // Download einer GPX Datei.
     public function download_xml() {
         $this->modules->Model->load("Tracks_Model");
 
+        // Infos holen.
         $user_id = $this->modules->Input->get("user_id", true);
         $track_id = $this->modules->Input->get("track_id", true);
 
+        // Track holen.
         $track = $this->Tracks_Model->get_track($user_id, $track_id);
 
         if($track) {
 
+            // Leeres DOM-Dokument anlegen.
             $document = new DOMDocument();
             $document->formatOutput = true;
 
+            // GPX-Tag schreiben.
             $gpx = $document->createElement("gpx");
             $gpx->setAttribute("version", "1.1");
             $gpx->setAttribute("creator", "MyTrack");
             $document->appendChild($gpx);
 
+            // Für jeden Wegpunkt ....
             for($i = 0; $i < count($track["waypoints"]); $i++) {
 
+                // ... wpt-Tag erstellen und LAT, LNG ablegen.
                 $wpt = $document->createElement("wpt");
                 $wpt->setAttribute("lat", $track["waypoints"][$i]->lat);
                 $wpt->setAttribute("lon", $track["waypoints"][$i]->lng);
 
+                // ... ele-Tag erstellen (Altitude)
                 $ele = $document->createElement("ele");
+                // Wenn ein Altitude-Wert beim Wegpunkt vorliegt.
                 if(isset($track["waypoints"][$i]->alt))
-                    $ele->appendChild($document->createTextNode($track["waypoints"][$i]->alt));
+                    $ele->appendChild($document->createTextNode($track["waypoints"][$i]->alt)); // Altidude
                 else
-                    $ele->appendChild($document->createTextNode("0"));
+                    $ele->appendChild($document->createTextNode("0")); // Ansonsten 0
                 $wpt->appendChild($ele);
 
 
+                // Wenn ein Timestamp-Wert beim Wegpunkt vorliegt, ...
                 if(isset($track["waypoints"][$i]->timestamp)) {
                     $time = $document->createElement("time");
+                    // ... diesen Anhängen. Zeitstempel / 1000 und dann nach ISO Date konvertieren.
                     $time->appendChild($document->createTextNode(date("c", $track["waypoints"][$i]->timestamp / 1000)));
                     $wpt->appendChild($time);
                 }
 
+                // Speed-Tag erstellen.
                 $speed = $document->createElement("speed");
                 if(isset($track["waypoints"][$i]->speed))
                     $speed->appendChild($document->createTextNode($track["waypoints"][$i]->speed));
@@ -207,37 +239,49 @@ class Tracks extends Framework
                 $gpx->appendChild($wpt);
 
             }
+
+            // HTTP-Header setzen und DOMDocument-Inhalt als XML ausgeben.
             header('Content-type: text/xml');
             header('Content-Disposition: attachment; filename="'.$user_id.'_'.$track_id.'.gpx"');
             echo $document->saveXML();
         }
     }
 
+    // Rendert das Upload-Formular für GPX
     public function upload_xml_html()
     {
         $this->modules->View->assign("xml_upload");
         $this->modules->View->render();
     }
 
+    // Empfängt die hochgeladene GPX Datei
     public function upload_xml()
     {
         $this->modules->Model->load("Tracks_Model");
 
+        // Dateiinfos aus den globalen Variablen holen.
         $filename = $_FILES['gpx_file']['name'];
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        // Wenn die richtige Extension vorliegt.
         if ($ext == "gpx" || $ext == "GPX") {
 
+            // String einlesen.
             $gpx_string = file_get_contents($_FILES["gpx_file"]["tmp_name"]);
 
+            // Leeres DOMDocument anlegen.
             $xml = new DOMDocument();
 
+            // Stringinhalt in das Dokument laden.
             $xml->loadXML($gpx_string);
 
             $waypoints = array();
 
 
+            // Für jeden Wegpunkt im XML
             foreach ($xml->getElementsByTagName("wpt") as $waypoint) {
 
+                // Ein Wegpunktobject mit den Daten anlegen.
                 $waypoints[] = (object)array(
                     "lat" => (string)$waypoint->getAttribute("lat"),
                     "lng" => (string)$waypoint->getAttribute("lon"),
@@ -248,6 +292,7 @@ class Tracks extends Framework
             }
 
 
+            // Einen neuen Track erstellen.
             $track = array(
                 "duration" => 0,
                 "waypoints" => $waypoints,
@@ -258,6 +303,7 @@ class Tracks extends Framework
                 "waypoints_enc" => $this->encode_path($waypoints)
             );
 
+            // Track in die Datenbank schreiben.
             if ($this->Tracks_Model->create_track($track)) exit("true");
             else exit("false");
         }
@@ -322,7 +368,7 @@ class Tracks extends Framework
         // Letzten 5 Bit Chunk auch +63 und zu Ascii
         $result .= chr($value + 63);
 
-
+        // Es können doofe Zeichen errechnet werden, die Escaped werden müssen.
         return addslashes($result);
     }
 

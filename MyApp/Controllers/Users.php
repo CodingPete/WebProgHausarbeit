@@ -22,10 +22,14 @@ class Users extends Framework
     {
         $this->modules->Model->load("Users_Model");
 
+        // POST-Parameter holen.
         $username = $this->modules->Input->post("username", true);
         $password = $this->modules->Input->post("password", true);
 
+        // Wenn der Login gültig ist.
         if($this->Users_Model->login($username, $password)) {
+
+            // Sessionvariabln setzen
             $this->modules->Session->set("user_type", "user");
             $this->modules->Session->set("user_id", $username);
             exit("true");
@@ -37,6 +41,7 @@ class Users extends Framework
 
         $this->modules->Model->load("Users_Model");
 
+        // POST-Parameter holen.
         $username = $this->modules->Input->post("username", true);
         $password = $this->modules->Input->post("password", true);
 

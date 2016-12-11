@@ -13,12 +13,17 @@ abstract class Framework
 
     public $modules;
 
+    // Muss von allen erbenden Klassen implementiert werden.
+    // Dies ist die Funktion die aufgerufen wird, wenn nur der Controller
+    // ohne Zielfunktion aufgerufen wird.
     abstract public function index();
 
     public function __construct()
     {
+        // Hier werden alle Untermodule abgelegt.
         $this->modules = new stdClass();
 
+        // Config einlesen-
         require_once(APP_ROOT
             . DIRECTORY_SEPARATOR
             . 'framework'
@@ -38,6 +43,7 @@ abstract class Framework
 
     private function load_modules()
     {
+        // Lädt alle in der Config stehenden Untermodule
         foreach ($this->config->load_modules as $module => $load) {
             $path = APP_ROOT
                 . DIRECTORY_SEPARATOR
@@ -51,6 +57,7 @@ abstract class Framework
                 . DIRECTORY_SEPARATOR
                 . $module . '.php';
 
+            // Wie soll das Untermodul geladen werden?
             switch ($load) {
                 // 0 : Nicht laden
                 case 0:
@@ -71,6 +78,7 @@ abstract class Framework
         }
     }
 
+    // Hiermit kann der Inhalt eines anderen Controllers aufgerufen werden.
     public function load_content($controller, $function = "") {
         echo file_get_contents(APP_DOMAIN."c=$controller&f=$function");
     }
