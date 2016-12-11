@@ -6,9 +6,23 @@
  * Time: 12:34
  */
 ?>
-<div>
+<style>
+    .formular {
+        text-align: center;
+    }
+    form {
+        margin-bottom: 30px;
+    }
+    input {
+        color: #FFFFFF;
+        border: none;
+        background-color: rgb(67, 79, 100);
+        width: 80%;
+    }
+</style>
+<div class="formular">
+    <h1>GPX Upload</h1>
     <form id="xml_upload" enctype="multipart/form-data">
-        GPX Upload
         <input type="file" name="gpx_file" id="gpx_file">
         <input type="submit" value="Upload GPX" name="submit">
     </form>

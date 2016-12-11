@@ -6,14 +6,32 @@
  * Time: 18:59
  */
 ?>
+<style>
+    .formular {
+        text-align: center;
+    }
 
-<form id="avatar_form">
-    <input type="file" name="soonToBeAvatar" id="soonToBeAvatar">
-    <input type="submit" value="Hochladen">
-</form>
+    form {
+        margin-bottom: 30px;
+    }
 
+    input {
+        color: #FFFFFF;
+        border: none;
+        background-color: rgb(67, 79, 100);
+        width: 80%;
+    }
+</style>
+
+<div class="formular">
+    <h1>Avatar Upload</h1>
+    <form id="avatar_form">
+        <input type="file" name="soonToBeAvatar" id="soonToBeAvatar">
+        <input type="submit" value="Hochladen">
+    </form>
+</div>
 <script>
-    $("#avatar_form").on("submit", function(e) {
+    $("#avatar_form").on("submit", function (e) {
         e.stopImmediatePropagation();
         e.preventDefault();
 
@@ -31,12 +49,12 @@
                 data: {
                     avatar: file_reader.result
                 },
-                success: function() {
+                success: function () {
                     $("#content_panel_close").click();
                     $.ajax({
                         method: "POST",
                         url: APP_DOMAIN + "index.php?c=Users&f=ajax_get_avatar",
-                        success: function(response) {
+                        success: function (response) {
                             $("#avatar").attr("src", response);
                         }
                     })
