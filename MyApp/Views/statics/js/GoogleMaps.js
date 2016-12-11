@@ -109,6 +109,11 @@ setInterval(function () {
 
     // Die Bounds der Karte holen
     bounds = map.getBounds();
+
+    // Falls grade Tracks angezeigt werden, ...
+    if(public_track.getPath().length > 0 || track_viewed.getPath().length > 0 || current_track.getPath() > 0) {
+        $("#ClearPath").show();
+    }
 }, 200);
 
 
@@ -134,7 +139,14 @@ function toggle_centering() {
     set_centering(!center);
 }
 
-// todo: Public-Tracks die auf der Karte liegen zeigen
+// Button um gezeichneten Track zu verbergen
+$(document).on("click", "#ClearPath", function() {
+    track_viewed.getPath().clear();
+    public_track.getPath().clear();
+    $(this).hide();
+});
+
+// Public Tracks auf Karte zeigen.
 setInterval(function () {
 
 

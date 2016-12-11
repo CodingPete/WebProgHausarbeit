@@ -16,8 +16,21 @@
     .gm-style-mtc {
         display: none;
     }
+    #ClearPath{
+        padding: 15px;
+        display: none;
+        position: fixed;
+        top: 80%;
+        left: 80%;
+        background-color: #FF0000;
+        cursor: pointer;
+        z-index: 2;
+        border-radius: 100%;
+    }
 </style>
 <div id="map"></div>
+
+<div id="ClearPath">X</div>
 
 
 <!-- Google Maps -->

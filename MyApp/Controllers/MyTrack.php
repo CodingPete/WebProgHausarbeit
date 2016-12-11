@@ -19,12 +19,15 @@ class MyTrack extends Framework
         // User eingeloggt?
         $login = $this->modules->Session->get("user_type") == "user";
 
+        // Header laden.
         $this->modules->View->assign("header", array(
             "login" => $login
         ));
 
+        // Niemand eingeloggt? Zeige Landingpage
         if (!$login)
             $this->modules->View->assign("Landingpage");
+        // Ansonsten lade App-Dashboard
         else $this->dashboard();
 
         $this->modules->View->assign("footer");

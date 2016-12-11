@@ -69,8 +69,8 @@ class Tracks_Model
     }
 
     /**
-     * @param $track_id Der zu holende Track
-     * @return array|bool Liefert den Track als Array aus. False wenn der Track leer ist.
+     * @param $track_id "Der zu holende Track"
+     * @return array|bool "Liefert den Track als Array aus. False wenn der Track leer ist."
      */
     public function get_track($user_id, $track_id)
     {
@@ -142,7 +142,16 @@ class Tracks_Model
      */
     public function delete_track($user_id, $track_id)
     {
-        $this->Database->del("$user_id:$track_id");
+        $track = $this->get_track($user_id, $track_id);
+        if($track) {
+            if(isset($track["public_key"])) {
+                $public_key = $track["public_key"];
+                $this->Database->del("public:$public_key");
+            }
+            $this->Database->del("$user_id:$track_id");
+            return true;
+        }
+        else return false;
     }
 
     /**
