@@ -175,19 +175,32 @@ class Tracks extends Framework
             $document->appendChild($gpx);
 
             for($i = 0; $i < count($track["waypoints"]); $i++) {
+
                 $wpt = $document->createElement("wpt");
                 $wpt->setAttribute("lat", $track["waypoints"][$i]->lat);
                 $wpt->setAttribute("lon", $track["waypoints"][$i]->lng);
-                if(isset($track["waypoints"][$i]->alt)) {
-                    $ele = $document->createElement("ele");
+
+                $ele = $document->createElement("ele");
+                if(isset($track["waypoints"][$i]->alt))
                     $ele->appendChild($document->createTextNode($track["waypoints"][$i]->alt));
-                    $wpt->appendChild($ele);
-                }
+                else
+                    $ele->appendChild($document->createTextNode("0"));
+                $wpt->appendChild($ele);
+
+
                 if(isset($track["waypoints"][$i]->timestamp)) {
                     $time = $document->createElement("time");
                     $time->appendChild($document->createTextNode(date("c", $track["waypoints"][$i]->timestamp / 1000)));
                     $wpt->appendChild($time);
                 }
+
+                $speed = $document->createElement("speed");
+                if(isset($track["waypoints"][$i]->speed))
+                    $speed->appendChild($document->createTextNode($track["waypoints"][$i]->speed));
+                else
+                    $speed->appendChild($document->createTextNode("0"));
+                $wpt->appendChild($speed);
+
                 $name = $document->createElement("name");
                 $name->appendChild($document->createTextNode($i));
                 $wpt->appendChild($name);
@@ -230,7 +243,8 @@ class Tracks extends Framework
                     "lng" => (string)$waypoint->getAttribute("lon"),
                     "alt" => (string)$waypoint->getElementsByTagName("ele")->item(0)->nodeValue,
                     "timestamp" => date("U", strtotime((string)$waypoint->getElementsByTagName("time")->item(0)->nodeValue)) * 1000,
-                );
+                    "speed" => (string)$waypoint->getElementsByTagName("speed")->item(0)->nodeValue
+                    );
             }
 
 

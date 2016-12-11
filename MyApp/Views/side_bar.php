@@ -113,7 +113,7 @@
 <div id="side_bar">
     <div id="side_bar_container">
         <div id="side_bar_upper">
-            <i class="fa fa-arrow-left fa-2x" id="back" aria-hidden="true"></i>
+            <i class="fa fa-arrow-left" id="back" aria-hidden="true"></i>
             <div id="side_bar_profile">
                 <img src="<?= APP_STATICS;?>borstiapache.jpg" id="avatar">
                 <div id="nickname"><?= $user_id; ?></div>

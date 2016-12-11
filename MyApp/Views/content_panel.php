@@ -45,7 +45,7 @@
 
 <div id="content_panel">
     <div id="content_panel_container">
-        <i class="fa fa-arrow-left fa-2x" id="content_panel_close" aria-hidden="true"></i>
+        <i class="fa fa-arrow-left" id="content_panel_close" aria-hidden="true"></i>
         <div id="ajax_container">
 
         </div>
