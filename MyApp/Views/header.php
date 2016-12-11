@@ -28,11 +28,13 @@
 
     <!-- Meine heiligen Javamanusskripte -->
     <script src="<?= APP_STATICS; ?>js/Users.js"></script>
+    <?php if($login): ?>
     <script src="<?= APP_STATICS; ?>js/GPS.js"></script>
     <script src="<?= APP_STATICS; ?>js/GoogleMaps.js"></script>
     <script src="<?= APP_STATICS; ?>js/side_bar.js"></script>
     <script src="<?= APP_STATICS; ?>js/Recorder.js"></script>
     <script src="<?= APP_STATICS; ?>js/content_panel.js"></script>
+    <?php endif; ?>
     <script>
         var APP_DOMAIN = "<?=APP_DOMAIN; ?>";
     </script>
@@ -49,7 +51,6 @@
             padding: 1.2em;
             width: 100%;
             margin-bottom: 30px;
-            background-color: rgba(67, 79, 100, 1);
             color: #FFFFFF;
         }
         a:visited {
@@ -58,15 +59,6 @@
 
         a:hover: {
             color: #FFFFFF;
-        }
-        .container-fluid {
-            margin: 0 auto;
-            padding: 0;
-            border-radius: 0px;
-        }
-        .row {
-            margin: 0 auto;
-            border-radius: 0px;
         }
         form {
             color: #000000;

@@ -16,8 +16,14 @@ class MyTrack extends Framework
 
     public function index()
     {
-        $this->modules->View->assign("header");
-        if ($this->modules->Session->get("user_type") != "user")
+        // User eingeloggt?
+        $login = $this->modules->Session->get("user_type") == "user";
+
+        $this->modules->View->assign("header", array(
+            "login" => $login
+        ));
+
+        if (!$login)
             $this->modules->View->assign("Landingpage");
         else $this->dashboard();
 
