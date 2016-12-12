@@ -46,5 +46,8 @@ class Users_Model
         return $this->Database->hGet("$user_id:details", "avatar");
     }
 
+    public function delete_user($user_id) {
+        $this->Database->del($user_id);
+    }
 
 }

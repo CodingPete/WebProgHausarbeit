@@ -80,4 +80,23 @@ class Users extends Framework
         if(!$avatar) exit("false");
         exit($avatar);
     }
+
+    public function ajax_delete_user() {
+        $user_id = $this->modules->Input->post("user_id", true);
+
+        $this->modules->Model->load("Tracks_Model");
+        $this->modules->Model->load("Users_Model");
+
+        // Alle Tracks des Users holen.
+        $tracks = $this->Tracks_Model->get_tracks_on_user($user_id);
+
+        // Alle Tracks des Users löschen
+        foreach($tracks as $track) {
+            $this->Tracks_Model->delete_track($user_id, $track["track_id"]);
+        }
+
+        // User löschen
+        $this->Users_Model->delete_user($user_id);
+
+    }
 }

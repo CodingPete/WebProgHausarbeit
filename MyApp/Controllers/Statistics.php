@@ -23,6 +23,47 @@ class Statistics extends Framework
     public function get_overall_stats()
     {
         // todo: Gesamtstatistiken anlegen.
+
+        // Alle Tracks holen.
+        $this->modules->Model->load("Tracks_Model");
+        $user_id = $this->modules->Session->get("user_id");
+
+        $tracks = $this->Tracks_Model->get_tracks_on_user($user_id);
+
+        // Ergebnisvariablen
+        $strecke = 0;
+        $zeit = 0;
+        $v_max = array();
+        $track_count = count($tracks);
+
+        foreach($tracks as $track) {
+            if($track) {
+                if(isset($track["waypoints"])) {
+                    $waypoints = json_decode($track["waypoints"]);
+                    $strecke += $this->info_distance($waypoints);
+                    $v_max[] = $this->info_max_speed($waypoints);
+                }
+                if(isset($track["duration"]))
+                    $zeit += $track["duration"];
+            }
+        }
+
+        $v_max = max($v_max);
+
+        $this->modules->View->assign("overall_stats", array(
+            "track_count" => $track_count,
+            "strecke" => $strecke,
+            "zeit" => $zeit,
+            "v_max" => $v_max
+        ));
+
+        $this->modules->View->render();
+
+        // Wenn der eingeloggte Benutzer gleich dem Besitzer ist, Löschenbutton anbieten.
+        if ($this->modules->Session->get("user_id") == $user_id) {
+            $delete_button = "<button class='btn-danger delete_kto' user='$user_id'>Konto löschen</button>";
+            echo $delete_button;
+        }
     }
 
     // Liefert die Statisken eines Tracks

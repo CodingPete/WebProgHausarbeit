@@ -132,7 +132,7 @@
                 </span>
                 GPX Upload
             </div>
-            <div class="side_bar_link" controller="" func="statistics">
+            <div class="side_bar_link" controller="Statistics" func="get_overall_stats">
             <span>
             <i class="fa fa-line-chart" aria-hidden="true"></i>
             </span>
