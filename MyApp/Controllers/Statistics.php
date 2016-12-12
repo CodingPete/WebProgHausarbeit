@@ -33,7 +33,7 @@ class Statistics extends Framework
         // Ergebnisvariablen
         $strecke = 0;
         $zeit = 0;
-        $v_max = array();
+        $v_max = array("0");
         $track_count = count($tracks);
 
         foreach($tracks as $track) {

@@ -52,9 +52,9 @@ GPS = function() {
 
     setInterval(function() {
         // Werte ins Overlay schreiben
-        if(!isNaN(dis.v()))
+        if(!isNaN(dis.v()) && dis.v() != null)
             $("#geschwindigkeit").text("Geschwindkeit : " + dis.v());
-        if(!isNaN(dis.z()))
+        if(!isNaN(dis.z()) && dis.z() != null)
             $("#hoehe").text("Höhe : " + dis.z());
     }, 200);
 

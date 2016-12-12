@@ -30,11 +30,11 @@
     <br>
 </div>
 <script>
-    $(document).on("click", ".delete", function () {
+    $(document).on("click", ".delete_kto", function () {
         var user_id = $(this).attr("user");
 
         $.ajax({
-            url: APP_DOMAIN + "index.php?c=User&f=ajax_delete_user",
+            url: APP_DOMAIN + "index.php?c=Users&f=ajax_delete_user",
             method: "POST",
             data: {
                 user_id: user_id

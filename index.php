@@ -14,7 +14,7 @@ define('APP_DOMAIN', "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
 define('APP_STATICS', APP_DOMAIN .  "/MyApp/Views/statics/");
 
 if (!ini_get('display_errors')) {
-    ini_set('display_errors', '0');
+    ini_set('display_errors', '1');
 }
 
 require_once(APP_ROOT

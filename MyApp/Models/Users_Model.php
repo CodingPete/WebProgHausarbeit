@@ -47,7 +47,7 @@ class Users_Model
     }
 
     public function delete_user($user_id) {
-        $this->Database->del($user_id);
+        $this->Database->del("$user_id:details");
     }
 
 }
