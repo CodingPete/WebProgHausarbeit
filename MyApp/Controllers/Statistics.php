@@ -108,9 +108,13 @@ class Statistics extends Framework
                     $div->setAttribute("style", "text-align: left;");
                     $text_stats->appendChild($div);
                     echo $text_stats->saveHTML();
+                    echo "Geschwindigkeitsverlauf <br>";
                     echo $this->svg_speed($waypoints);
+                    echo "Durchschnittsgeschwindigkeit <br>";
                     echo $this->svg_speed_average($waypoints);
+                    echo "Höhenverlauf <br>";
                     echo $this->svg_altitude($waypoints);
+                    echo "Kummulierte Höhe <br>";
                     echo $this->svg_altitude_kum($waypoints);
                 } catch (Exception $e) {
                     $error[] = $e->getMessage();
