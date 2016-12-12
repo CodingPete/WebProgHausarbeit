@@ -32,4 +32,5 @@ require_once(APP_ROOT
     . DIRECTORY_SEPARATOR
     . "MyTrack.php");
 
+// Lade den Hauptcontroller
 new MyTrack();

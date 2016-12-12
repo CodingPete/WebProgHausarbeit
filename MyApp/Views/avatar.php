@@ -31,14 +31,17 @@
     </form>
 </div>
 <script>
+    //Wenn das Avatarupload formular eingereicht wird
     $("#avatar_form").on("submit", function (e) {
         e.stopImmediatePropagation();
         e.preventDefault();
 
         var avatar;
 
+        // Datei holen
         var avatar_file = document.getElementById("soonToBeAvatar").files[0];
         var file_reader = new FileReader();
+        // Bild als Dataurl holen
         file_reader.readAsDataURL(avatar_file);
         file_reader.onload = upload;
 
@@ -50,7 +53,9 @@
                     avatar: file_reader.result
                 },
                 success: function () {
+                    // Bei Erfolg Panel schließen
                     $("#content_panel_close").click();
+                    // Avatar neuholen
                     $.ajax({
                         method: "POST",
                         url: APP_DOMAIN + "index.php?c=Users&f=ajax_get_avatar",

@@ -12,9 +12,11 @@ var bounds;
 var public_markers = new Array();
 var public_track;
 
+// Callback funktion für die Google Library
 function initMap() {
 
 
+    // Neues Map Element
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: -34.397, lng: 150.644},
         scrollwheel: false,
@@ -23,6 +25,7 @@ function initMap() {
         streetViewControl: false
     });
 
+    // Position des Benutzers
     map_pos = new google.maps.Marker({
         position: {lat: -34.397, lng: 150.644},
         map: map,
@@ -30,6 +33,7 @@ function initMap() {
         icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
     });
 
+    // Aktueller Track in den aufgezeichnet wird
     current_track = new google.maps.Polyline({
         strokeColor: "#0000FF",
         strokeOpacity: 1.0,
@@ -38,6 +42,7 @@ function initMap() {
     });
     current_track.setMap(map);
 
+    // Track der sich gerade angesehen wird
     track_viewed = new google.maps.Polyline({
         strokeColor: "#FF0000",
         strokeOpacity: 1.0,
@@ -47,6 +52,7 @@ function initMap() {
     });
     track_viewed.setMap(map);
 
+    // Public Track der angesehen wird
     public_track = new google.maps.Polyline({
         strokeColor: "#00FF00",
         strokeOpacity: 1.0,
@@ -124,6 +130,7 @@ $(document).ready(function () {
     })
 });
 
+// Setzen der Kartenzentrierung
 function set_centering(setting) {
     if (setting) {
         $("#center").css("color", "inherit");
@@ -135,6 +142,7 @@ function set_centering(setting) {
     }
 }
 
+// Setzen der Kartenzentrierung
 function toggle_centering() {
     set_centering(!center);
 }
@@ -150,7 +158,7 @@ $(document).on("click", "#ClearPath", function() {
 setInterval(function () {
 
 
-
+    // Obere linke, untere Rechte Kante der Karte
     var bounds = {
         ne: {
             lat: map.getBounds().getNorthEast().lat(),
@@ -209,11 +217,6 @@ setInterval(function () {
                 public_markers.push(marker);
             }
 
-            // Alte Marker löschen
-
-            // Neue Marker zeichnen
-
-            // EventListener setzen
         }
     })
 }, 5000);

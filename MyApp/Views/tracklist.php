@@ -33,6 +33,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         cursor: pointer;
     }
 </style>
+<!-- Auschnitt der sich für jeden Track wiederholt -->
 <?php foreach ($tracklist as $track): ?>
     <?php $track_id = $track["track_id"]; $user_id = $track["user_id"]; ?>
     <div class="track_entry" id="track_entry_<?= $track["track_id"]; ?>">
@@ -88,6 +89,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
     </div>
 <?php endforeach; ?>
 <script>
+    // Wenn die Sichtbarkeitsauswahl geändert wird
     $("select").on("change", function () {
         var track_id = $(this).attr("track");
         var user_id = $(this).attr("user");
@@ -106,6 +108,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         });
     });
 
+    // Wenn auf Trackbild geklickt wird
     $(".track_img_mine").on("click", function () {
 
         set_centering(false);
@@ -146,6 +149,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         })
     });
 
+    // Wenn auf Trackbild geklickt wird, dass nicht dem Nutzer gehört
     $(".track_img_others").on("click", function () {
 
         set_centering(false);
@@ -184,6 +188,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         })
     });
 
+    // Wenn die Stats ausgeklappt werden sollen
     $(".collapse_stats").on("click", function () {
         var area = $(this).next();
 
@@ -203,6 +208,7 @@ $static_maps_key = "&key=AIzaSyBep0qQqNBiTtiXlvguRKrWj-UXIBQySEM";
         });
     });
 
+    // Wenn der Track gelöscht werden soll.
     $(document).on("click", ".delete", function () {
         var user_id = $(this).attr("user");
         var track_id = $(this).attr("track");

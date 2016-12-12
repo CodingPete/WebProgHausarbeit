@@ -5,6 +5,7 @@
 
 $(document).ready(function() {
 
+    // Wenn auf den Burger geklickt wird.
     $("#burger").on("click", function(e) {
 
         var sidebar = $("#side_bar");
@@ -34,11 +35,15 @@ $(document).ready(function() {
         }
     });
 
+    // Wenn auf zurück geklickt wird.
     $("#back").on("click", function() {
+        // Menü einklappen
         $("#burger").click();
     })
 
+    // Wenn schwarzes Overlay geklickt wird.
     $("#black_bar").on("click", function() {
+        // Menü einklappen
         $("#burger").click();
     })
 

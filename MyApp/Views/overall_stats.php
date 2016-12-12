@@ -30,6 +30,7 @@
     <br>
 </div>
 <script>
+    // Wenn auf Kontolöschen geklickt wird
     $(document).on("click", ".delete_kto", function () {
         var user_id = $(this).attr("user");
 
