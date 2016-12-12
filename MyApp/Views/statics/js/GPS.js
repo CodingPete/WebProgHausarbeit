@@ -10,6 +10,8 @@ GPS = function() {
 
     var watch_id;
 
+    var dis = this;
+
     var savePosition = function(position) {
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
@@ -47,6 +49,14 @@ GPS = function() {
         }
 
     };
+
+    setInterval(function() {
+        // Werte ins Overlay schreiben
+        if(!isNaN(dis.v()))
+            $("#geschwindigkeit").text("Geschwindkeit : " + dis.v());
+        if(!isNaN(dis.z()))
+            $("#hoehe").text("Höhe : " + dis.z());
+    }, 200);
 
     getLocation();
 };
