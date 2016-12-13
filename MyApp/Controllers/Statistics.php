@@ -36,14 +36,14 @@ class Statistics extends Framework
         $v_max = array("0");
         $track_count = count($tracks);
 
-        foreach($tracks as $track) {
-            if($track) {
-                if(isset($track["waypoints"])) {
+        foreach ($tracks as $track) {
+            if ($track) {
+                if (isset($track["waypoints"])) {
                     $waypoints = json_decode($track["waypoints"]);
                     $strecke += $this->info_distance($waypoints);
                     $v_max[] = $this->info_max_speed($waypoints);
                 }
-                if(isset($track["duration"]))
+                if (isset($track["duration"]))
                     $zeit += $track["duration"];
             }
         }
@@ -137,11 +137,28 @@ class Statistics extends Framework
     // Erstellt das Geschwindigkeitsdiagramm
     private function svg_speed($waypoints)
     {
-       foreach($waypoints as $waypoint) {
+        // Alle Wegpunkte durchlaufen
+        for ($i = 0; $i < count($waypoints); $i++) {
 
-           if(isset($waypoint->speed))
-                $speed[] = $waypoint->speed * 3.6;
-           else $speed[] = 0;
+            // Aktueller Wegpunkt
+            $current = $waypoints[$i];
+
+            // Vorherigen Wegpunkt holen
+            if ($i > 0) $previous = $waypoints[$i - 1];
+
+            // Wenn ein Speed-Wert vorliegt
+            if (isset($current->speed) && is_numeric($current->speed)) {
+                $speed[] = $current->speed * 3.6;
+            } // Ansonsten muss dieser berechnet werden
+            else {
+                if (isset($previous)) {
+                    $time_between = $this->time_between_points($previous, $current, "stunden");
+                    $distance_between = $this->distance_between_points($previous, $current);
+                    if ($time_between > 0) {
+                        $speed[] = $distance_between / $time_between;
+                    } else $speed[] = 0;
+                } else $speed[] = 0;
+            }
         }
 
         // Aus den Ergebnissen nun einen Graphen erstellen
@@ -154,7 +171,7 @@ class Statistics extends Framework
 
         // Höchste erreichte Geschwindigkeit als Maximalauschlag des Graphen
         $max = max($speed);
-        if($max <= 0) return "";
+        if ($max <= 0) return "";
 
         // Anzahl Spalten
         $col_count = count($speed);
@@ -165,12 +182,11 @@ class Statistics extends Framework
         $scale_width = 5;
 
 
-
         // Svg Element erstellen und Skala bauen.
         $graph = $this->svg_init_and_scale($chart_width, $chart_height, $scale_width, $max);
 
         // Für die Anzahl Spalten
-        for($i = 0; $i < $col_count; $i++) {
+        for ($i = 0; $i < $col_count; $i++) {
 
             // Startposition des Balken berechnen.
             $x = $col_width + $i * $col_width;
@@ -194,11 +210,28 @@ class Statistics extends Framework
     // Erstellt das Durchschnittsgeschwindigkeitsdiagramm
     private function svg_speed_average($waypoints)
     {
-        foreach($waypoints as $waypoint) {
+        // Alle Wegpunkte durchlaufen
+        for ($i = 0; $i < count($waypoints); $i++) {
 
-            if(isset($waypoint->speed))
-                $speed[] = $waypoint->speed * 3.6;
-            else $speed[] = 0;
+            // Aktueller Wegpunkt
+            $current = $waypoints[$i];
+
+            // Vorherigen Wegpunkt holen
+            if ($i > 0) $previous = $waypoints[$i - 1];
+
+            // Wenn ein Speed-Wert vorliegt
+            if (isset($current->speed) && is_numeric($current->speed)) {
+                $speed[] = $current->speed * 3.6;
+            } // Ansonsten muss dieser berechnet werden
+            else {
+                if (isset($previous)) {
+                    $time_between = $this->time_between_points($previous, $current, "stunden");
+                    $distance_between = $this->distance_between_points($previous, $current);
+                    if ($time_between > 0) {
+                        $speed[] = $distance_between / $time_between;
+                    } else $speed[] = 0;
+                } else $speed[] = 0;
+            }
         }
 
         // Aus den Ergebnissen nun einen Graphen erstellen
@@ -209,12 +242,16 @@ class Statistics extends Framework
         // Höhe des Diagramms
         $chart_height = 100;
 
-        // Höchste erreichte Geschwindigkeit als Maximalauschlag des Graphen
-        $max = max($speed);
-        if($max <= 0) return "";
+        $spd = array();
+        // Höchste erreichte Durchscnittsgeschwindigkeit als Maximalauschlag des Graphen
+        for ($i = 0; $i < count($speed); $i++) {
+            $spd[] = $this->average($speed, $i);
+        }
+        $max = max($spd);
+        if ($max <= 0) return "";
 
         // Anzahl Spalten
-        $col_count = count($speed);
+        $col_count = count($spd);
 
         // Spaltenbreite = Diagrammbreite Durch Anzahlspalten
         $col_width = $chart_width / $col_count;
@@ -222,16 +259,15 @@ class Statistics extends Framework
         $scale_width = 5;
 
 
-
         // Svg Element erstellen und Skala bauen.
         $graph = $this->svg_init_and_scale($chart_width, $chart_height, $scale_width, $max);
 
         // Für die Anzahl Spalten
-        for($i = 0; $i < $col_count; $i++) {
+        for ($i = 0; $i < $col_count; $i++) {
 
             // Startposition des Balken berechnen.
             $x = $col_width + $i * $col_width;
-            $col_height = $this->average($speed, $i);  // Balkenhöhe ist die Geschwindigkeit im Verhältnis zur maximalen Geschwindigkeit
+            $col_height = $spd[$i] / $max * 100;  // Balkenhöhe ist die Geschwindigkeit im Verhältnis zur maximalen Geschwindigkeit
             $y = 100 - $col_height;
 
             // Balkenelement mit den berechneten Werten erstellen.
@@ -249,10 +285,11 @@ class Statistics extends Framework
     }
 
     // Erstellt das Höhendiagramm
-    private function svg_altitude($waypoints) {
-        foreach($waypoints as $waypoint) {
+    private function svg_altitude($waypoints)
+    {
+        foreach ($waypoints as $waypoint) {
 
-            if(isset($waypoint->alt))
+            if (isset($waypoint->alt))
                 $alt[] = $waypoint->alt;
             else $alt[] = 0;
         }
@@ -267,7 +304,7 @@ class Statistics extends Framework
 
         // Höchste erreichte Höhe als Maximalauschlag des Graphen
         $max = max($alt);
-        if($max <= 0) return "";
+        if ($max <= 0) return "";
 
         // Anzahl Spalten
         $col_count = count($alt);
@@ -278,12 +315,11 @@ class Statistics extends Framework
         $scale_width = 30;
 
 
-
         // Svg Element erstellen und Skala bauen.
         $graph = $this->svg_init_and_scale($chart_width, $chart_height, $scale_width, $max);
 
         // Für die Anzahl Spalten
-        for($i = 0; $i < $col_count; $i++) {
+        for ($i = 0; $i < $col_count; $i++) {
 
             // Startposition des Balken berechnen.
             $x = $scale_width + $i * $col_width;
@@ -305,19 +341,23 @@ class Statistics extends Framework
     }
 
     // Erstellt das kummulierte Höhendiagramm
-    private function svg_altitude_kum($waypoints) {
+    private function svg_altitude_kum($waypoints)
+    {
 
-        foreach($waypoints as $waypoint) {
+        foreach ($waypoints as $waypoint) {
 
-            if(isset($waypoint->alt))
+            if (isset($waypoint->alt))
                 $alt[] = $waypoint->alt;
             else $alt[] = 0;
         }
 
         // Kummuliere
-        for($i = 1; $i < count($alt); $i++) {
-            $alt[$i] = $alt[$i] - $alt[$i - 1];
+        $kum = [];
+        for ($i = 1; $i < count($alt) - 1; $i++) {
+            if($alt[$i + 1] > $alt[$i])
+                $kum[] =  $alt[$i] - $alt[$i - 1];
         }
+
 
         // Aus den Ergebnissen nun einen Graphen erstellen
 
@@ -328,11 +368,11 @@ class Statistics extends Framework
         $chart_height = 100;
 
         // Höchste erreichte Höhe als Maximalauschlag des Graphen
-        $max = max($alt);
-        if($max <= 0) return "";
+        $max = max($kum);
+        if ($max <= 0) return "";
 
         // Anzahl Spalten
-        $col_count = count($alt);
+        $col_count = count($kum);
 
         // Spaltenbreite = Diagrammbreite Durch Anzahlspalten
         $col_width = $chart_width / $col_count;
@@ -340,16 +380,15 @@ class Statistics extends Framework
         $scale_width = 30;
 
 
-
         // Svg Element erstellen und Skala bauen.
         $graph = $this->svg_init_and_scale($chart_width, $chart_height, $scale_width, $max);
 
         // Für die Anzahl Spalten
-        for($i = 0; $i < $col_count; $i++) {
+        for ($i = 0; $i < $col_count; $i++) {
 
             // Startposition des Balken berechnen.
             $x = $scale_width + $i * $col_width;
-            $col_height = $alt[$i] / $max * 100;  // Balkenhöhe ist die Geschwindigkeit im Verhältnis zur maximalen Geschwindigkeit
+            $col_height = $kum[$i] / $max * 100;  // Balkenhöhe ist die Geschwindigkeit im Verhältnis zur maximalen Geschwindigkeit
             $y = 100 - $col_height;
 
             // Balkenelement mit den berechneten Werten erstellen.
@@ -367,7 +406,8 @@ class Statistics extends Framework
     }
 
     // Erstellt ein Chart Grundgerüst mit Skala
-    private function svg_init_and_scale($chart_width, $chart_height, $scale_width, $max) {
+    private function svg_init_and_scale($chart_width, $chart_height, $scale_width, $max)
+    {
         // Svg Element erstellen.
         $graph = new DomDocument();
         $svg = $graph->createElement("svg");
@@ -435,11 +475,12 @@ class Statistics extends Framework
 
 
     //Berechnet die Länge eines Track
-    private function info_distance($waypoints) {
+    private function info_distance($waypoints)
+    {
 
         $distance = 0;
 
-        for($i = 1; $i < count($waypoints); $i++) {
+        for ($i = 1; $i < count($waypoints); $i++) {
             $distance += $this->distance_between_points($waypoints[$i - 1], $waypoints[$i]);
         }
 
@@ -447,44 +488,92 @@ class Statistics extends Framework
     }
 
     // Berechnet die kumulierte Höhe
-    private function info_altitude($waypoints) {
-        $altitude = 0;
+    private function info_altitude($waypoints)
+    {
+        foreach ($waypoints as $waypoint) {
 
-        for($i = 1; $i < count($waypoints); $i++) {
-            $altitude += $waypoints[$i]->alt - $waypoints[$i - 1]->alt;
+            if (isset($waypoint->alt))
+                $alt[] = $waypoint->alt;
+            else $alt[] = 0;
         }
 
-        return number_format($altitude, 2);
+        $kum = 0;
+        // Kummuliere
+        for ($i = 1; $i < count($alt) - 1; $i++) {
+            if($alt[$i + 1] > $alt[$i])
+            $kum += $alt[$i] - $alt[$i - 1];
+        }
+
+        return number_format($kum, 2);
     }
 
     // Berechnet die höchste erreichte Geschwindigkeit
-    private function info_max_speed($waypoints) {
-        foreach($waypoints as $waypoint) {
+    private function info_max_speed($waypoints)
+    {
+        // Alle Wegpunkte durchlaufen
+        for ($i = 0; $i < count($waypoints); $i++) {
 
-            if(isset($waypoint->speed))
-                $speed[] = $waypoint->speed * 3.6;
-            else $speed[] = 0;
+            // Aktueller Wegpunkt
+            $current = $waypoints[$i];
+
+            // Vorherigen Wegpunkt holen
+            if ($i > 0) $previous = $waypoints[$i - 1];
+
+            // Wenn ein Speed-Wert vorliegt
+            if (isset($current->speed) && is_numeric($current->speed)) {
+                $speed[] = $current->speed * 3.6;
+            } // Ansonsten muss dieser berechnet werden
+            else {
+                if (isset($previous)) {
+                    $time_between = $this->time_between_points($previous, $current, "stunden");
+                    $distance_between = $this->distance_between_points($previous, $current);
+                    if ($time_between > 0) {
+                        $speed[] = $distance_between / $time_between;
+                    } else $speed[] = 0;
+                } else $speed[] = 0;
+            }
         }
 
         return number_format(max($speed), 2);
     }
 
     // Berechnet die Durchschnittsgeschwindigkeit
-    private function info_avg_speed($waypoints) {
+    private function info_avg_speed($waypoints)
+    {
         $speed = array();
 
-        foreach($waypoints as $waypoint) {
-            if(isset($waypoint->speed)) $speed[] = $waypoint->speed;
-            else $speed[] = 0;
+        // Alle Wegpunkte durchlaufen
+        for ($i = 0; $i < count($waypoints); $i++) {
+
+            // Aktueller Wegpunkt
+            $current = $waypoints[$i];
+
+            // Vorherigen Wegpunkt holen
+            if ($i > 0) $previous = $waypoints[$i - 1];
+
+            // Wenn ein Speed-Wert vorliegt
+            if (isset($current->speed) && is_numeric($current->speed)) {
+                $speed[] = $current->speed * 3.6;
+            } // Ansonsten muss dieser berechnet werden
+            else {
+                if (isset($previous)) {
+                    $time_between = $this->time_between_points($previous, $current, "stunden");
+                    $distance_between = $this->distance_between_points($previous, $current);
+                    if ($time_between > 0) {
+                        $speed[] = $distance_between / $time_between;
+                    } else $speed[] = 0;
+                } else $speed[] = 0;
+            }
         }
         return number_format($this->average($speed, count($speed)), 2);
     }
 
     // Berechnet die höchste Höhe
-    private function info_max_alt($waypoints) {
-        foreach($waypoints as $waypoint) {
+    private function info_max_alt($waypoints)
+    {
+        foreach ($waypoints as $waypoint) {
 
-            if(isset($waypoint->alt))
+            if (isset($waypoint->alt))
                 $alt[] = $waypoint->alt;
             else $alt[] = 0;
         }
@@ -512,25 +601,32 @@ class Statistics extends Framework
         return $distance;
     }
 
-    private function time_between_points($wp_1, $wp_2)
+    private function time_between_points($wp_1, $wp_2, $format = "stunden")
     {
 
         $time = $wp_2->timestamp - $wp_1->timestamp;
 
-        // Zeit in Stunden zurückliefern
-        return ($time / 60 / 60);
+        switch ($format) {
+            case "stunden":
+                return ($time / 1000 / 60 / 60);
+            case "minuten":
+                return ($time / 1000 / 60);
+            case "sekunden":
+                return $time / 1000;
+        }
     }
 
-    private function average($values, $i) {
+    private function average($values, $i)
+    {
         $average = 0;
 
         // Den Durchschnitt von Werten bis zum index i berechnen
-        for($k = 0; $k != $i; $k++) {
+        for ($k = 0; $k != $i; $k++) {
             $average += $values[$k];
         }
 
         // Wenn weiter als das erste Element im Array gezählt werden soll
-        if($k > 0) return $average / $k;
+        if ($k > 0) return $average / $k;
 
         // Ansonsten einfach das erste Element zurückgeben.
         else return $values[0];

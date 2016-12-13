@@ -42,7 +42,7 @@ function initMap() {
     });
     current_track.setMap(map);
 
-    // Track der sich gerade angesehen wird
+    // Eigener Track der gerade angesehen wird
     track_viewed = new google.maps.Polyline({
         strokeColor: "#FF0000",
         strokeOpacity: 1.0,

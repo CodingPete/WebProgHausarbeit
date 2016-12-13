@@ -290,7 +290,20 @@ class Tracks extends Framework
                     "speed" => (string)$waypoint->getElementsByTagName("speed")->item(0)->nodeValue
                     );
             }
+            // Wenn keine wpt-Tags vorhanden sind, probier trkpt
+            if(count($waypoints) == 0) {
+                foreach ($xml->getElementsByTagName("trkpt") as $waypoint) {
 
+                    // Ein Wegpunktobject mit den Daten anlegen.
+                    $waypoints[] = (object)array(
+                        "lat" => (string)$waypoint->getAttribute("lat"),
+                        "lng" => (string)$waypoint->getAttribute("lon"),
+                        "alt" => (string)$waypoint->getElementsByTagName("ele")->item(0)->nodeValue,
+                        "timestamp" => date("U", strtotime((string)$waypoint->getElementsByTagName("time")->item(0)->nodeValue)) * 1000,
+                        "speed" => (string)$waypoint->getElementsByTagName("speed")->item(0)->nodeValue
+                    );
+                }
+            }
 
             // Einen neuen Track erstellen.
             $track = array(
